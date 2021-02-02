@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30523.141
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match-three-WPF", "Match-three-WPF\Match-three-WPF.csproj", "{CAC2DCBA-4D67-4D9E-A353-60DBCA563FBD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match-three-NET.Framework", "Match-three-NET.Framework\Match-three-NET.Framework.csproj", "{AD84321F-45F8-4920-822A-DDB9ECEEF415}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{CAC2DCBA-4D67-4D9E-A353-60DBCA563FBD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAC2DCBA-4D67-4D9E-A353-60DBCA563FBD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAC2DCBA-4D67-4D9E-A353-60DBCA563FBD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAC2DCBA-4D67-4D9E-A353-60DBCA563FBD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {276455E3-D2CE-4AB3-BC9F-EB4F2FBDE3D0}
+	EndGlobalSection
+EndGlobal
