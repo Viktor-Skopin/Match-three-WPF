@@ -6,11 +6,24 @@ using System.Threading.Tasks;
 
 namespace Match_three_NET.Framework
 {
+    /// <summary>
+    /// Игровое поле
+    /// </summary>
     public class GameField
     {
+        /// <summary>
+        /// Поле ячеек
+        /// </summary>
         public Cell[,] cells;
+        /// <summary>
+        /// Размер поля
+        /// </summary>
         int fieldSize { get; set; }
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="size">Размер поля</param>
         public GameField(int size)
         {
             cells = new Cell[size, size];
@@ -27,11 +40,19 @@ namespace Match_three_NET.Framework
             StartNewGame();
         }
 
+        /// <summary>
+        /// Начало новой игры
+        /// </summary>
         public void StartNewGame()
         {
             DefineFigures();
         }
 
+        /// <summary>
+        /// Возвращает случайную фигурку
+        /// </summary>
+        /// <param name="random">Random который должен быть инициализирован вне цикла</param>
+        /// <returns></returns>
         public Figure GetRandomFigure(Random random)
         {
             Array values = Enum.GetValues(typeof(Figure));
@@ -40,6 +61,9 @@ namespace Match_three_NET.Framework
             return randomFigure;
         }
 
+        /// <summary>
+        /// Присвоение всем ячейкам случайной фигурки
+        /// </summary>
         public void DefineFigures()
         {
             Random random = new Random();

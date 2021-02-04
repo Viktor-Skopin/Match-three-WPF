@@ -15,13 +15,33 @@ namespace Match_three_WPF
 {
     public class Visualizer
     {
+        /// <summary>
+        /// Изображения
+        /// </summary>
         Image[,] images;
+        /// <summary>
+        /// Кнопки
+        /// </summary>
         Button[,] buttons;
 
+        /// <summary>
+        /// Графическое игровое поле
+        /// </summary>
         Grid GameFieldControl;
+        /// <summary>
+        /// Логической егровое поле
+        /// </summary>
         GameField GameField;
+        /// <summary>
+        /// Размер игрового поля
+        /// </summary>
         int fieldSize;
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="FieldGrid">Игровое поле</param>
+        /// <param name="size">Размер игрового поля</param>
         public Visualizer(Grid FieldGrid, int size)
         {
             GameFieldControl = FieldGrid;
@@ -46,6 +66,9 @@ namespace Match_three_WPF
             PrepareGrid();
         }
 
+        /// <summary>
+        /// Присвоение всем ячейкам соответствующего изображения
+        /// </summary>
         public void DefineImages()
         {
             for (int x = 0; x < fieldSize; x++)
@@ -57,6 +80,11 @@ namespace Match_three_WPF
             }
         }
 
+        /// <summary>
+        /// Присвоение ячейки соответствующего изображения
+        /// </summary>
+        /// <param name="cell">Логическая ячейка</param>
+        /// <param name="image">Графическая ячейка</param>
         public void DefineImage(Cell cell, Image image)
         {
             BitmapImage BMI = new BitmapImage();
@@ -69,6 +97,11 @@ namespace Match_three_WPF
             ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
         }
 
+        /// <summary>
+        /// Возвращает относительный путь к изображению соответствующей фигурки
+        /// </summary>
+        /// <param name="figure">Фигурка</param>
+        /// <returns></returns>
         public string GetFigurePath(Figure figure)
         {
             switch (figure)
@@ -90,14 +123,19 @@ namespace Match_three_WPF
             }
         }
 
+        /// <summary>
+        /// Подготовка графического игрового поля для дальнейшей работы с ним
+        /// </summary>
         public void PrepareGrid()
         {
+            //Разбиение грида на столбцы и строки
             for (int i = 0; i < fieldSize; i++)
             {
                 GameFieldControl.ColumnDefinitions.Add(new ColumnDefinition());
                 GameFieldControl.RowDefinitions.Add(new RowDefinition());
             }
 
+            //Присвоение кнопок гриду
             for (int x = 0; x < fieldSize; x++)
             {
                 for (int y = 0; y < fieldSize; y++)
@@ -110,17 +148,22 @@ namespace Match_three_WPF
             }
         }
 
+        /// <summary>
+        /// Назатие на графическую ячейку
+        /// </summary>
         public void CellClick(object sender, EventArgs e)
         {
+            //Извлечение координат
             int x = Grid.GetColumn(sender as Button);
             int y = Grid.GetRow(sender as Button);
 
+            //Анимация
             var animation = new DoubleAnimation();
             animation.From = 1.0;
             animation.To = 0.0;
             animation.Duration = TimeSpan.FromSeconds(0.5);
             animation.AutoReverse = true;
-            animation.RepeatBehavior = RepeatBehavior.Forever;
+            //animation.RepeatBehavior = RepeatBehavior.Forever;
             images[x,y].BeginAnimation(UIElement.OpacityProperty, animation);
         }
     }
