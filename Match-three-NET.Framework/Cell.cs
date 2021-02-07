@@ -22,11 +22,15 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Выбрана ли эта ячейка
         /// </summary>
-        public bool IsSelected { get; set; }
+        public bool IsSelected;
         /// <summary>
         /// Фигурка, помещённая в эту ячейку
         /// </summary>
         public Figure figure { get; set; }
+        /// <summary>
+        /// Помечена ли ячейка на удаление
+        /// </summary>
+        public bool IsMarkedForDeletion { get; set; }
 
         /// <summary>
         /// Конструктор
@@ -36,7 +40,39 @@ namespace Match_three_NET.Framework
             X = x;
             Y = y;
             IsSelected = false;
+            IsMarkedForDeletion = false;
             figure = Figure.Empty;
+        }
+
+        /// <summary>
+        /// Выбрать ячейку
+        /// </summary>
+        public void Select()
+        {
+            IsSelected = true;
+        }
+
+        /// <summary>
+        /// Снять выбор ячейки
+        /// </summary>
+        public void UnSelect()
+        {
+            IsSelected = false;
+        }
+
+        /// <summary>
+        /// Переключить выбор ячейки
+        /// </summary>
+        public void SwitchSelection()
+        {
+            if (IsSelected)
+            {
+                IsSelected = false;
+            }
+            else
+            {
+                IsSelected = true;
+            }
         }
     }
 }

@@ -23,7 +23,6 @@ namespace Match_three_WPF
         /// Кнопки
         /// </summary>
         Button[,] buttons;
-
         /// <summary>
         /// Графическое игровое поле
         /// </summary>
@@ -36,6 +35,27 @@ namespace Match_three_WPF
         /// Размер игрового поля
         /// </summary>
         int fieldSize;
+        /// <summary>
+        /// Изображение, которое анимируется в данный момент
+        /// </summary>
+        Image AnimatedImage;
+        /// <summary>
+        /// Выбрана ли какая либо ячейка
+        /// </summary>
+        bool IsSomeSelected;
+        /// <summary>
+        /// Координата X выбранной ячейки
+        /// </summary>
+        int selectedX;
+        /// <summary>
+        /// Координата Y выбранной ячейки
+        /// </summary>
+        int selectedY;
+
+        /// <summary>
+        /// Происходит ли в данный момент анимация
+        /// </summary>
+        bool isAnimationGoing = false;
 
         /// <summary>
         /// Конструктор
@@ -85,16 +105,28 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="cell">Логическая ячейка</param>
         /// <param name="image">Графическая ячейка</param>
-        public void DefineImage(Cell cell, Image image)
+        async public void DefineImage(Cell cell, Image image)
         {
-            BitmapImage BMI = new BitmapImage();
-            BMI.BeginInit();
-            BMI.UriSource = new Uri(GetFigurePath(cell.figure),UriKind.Relative);
-            BMI.EndInit();
-            image.Source = BMI;
+            if(cell.figure == Figure.Empty)
+            {                
+                StartImageAnimation(image, Animations.Disappearance);
+                await Task.Delay(500);
+                image.Source = null;
+                ImageBehavior.SetAnimatedSource(image, null);
+            }
+            else
+            {
+                BitmapImage BMI = new BitmapImage();
+                BMI.BeginInit();
+                BMI.UriSource = new Uri(GetFigurePath(cell.figure), UriKind.Relative);
+                BMI.EndInit();
+                image.Source = BMI;
 
-            ImageBehavior.SetAnimatedSource(image, BMI);
-            ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
+                ImageBehavior.SetAnimatedSource(image, BMI);
+                ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
+
+                StartImageAnimation(image, Animations.Appearance);
+            }
         }
 
         /// <summary>
@@ -151,20 +183,164 @@ namespace Match_three_WPF
         /// <summary>
         /// Назатие на графическую ячейку
         /// </summary>
-        public void CellClick(object sender, EventArgs e)
+        async public void CellClick(object sender, EventArgs e)
         {
             //Извлечение координат
             int x = Grid.GetColumn(sender as Button);
             int y = Grid.GetRow(sender as Button);
+            if(isAnimationGoing == false)
+            {
+                //Первое нажатие
+                if (IsSomeSelected == false)
+                {
+                    //Логика
+                    GameField.SelectCell(x, y);
+                    IsSomeSelected = true;
 
-            //Анимация
-            var animation = new DoubleAnimation();
-            animation.From = 1.0;
-            animation.To = 0.0;
-            animation.Duration = TimeSpan.FromSeconds(0.5);
-            animation.AutoReverse = true;
-            //animation.RepeatBehavior = RepeatBehavior.Forever;
-            images[x,y].BeginAnimation(UIElement.OpacityProperty, animation);
+                    selectedX = x;
+                    selectedY = y;
+                    //Анимация
+                    StartImageAnimation(images[x, y], Animations.Selection);
+                    AnimatedImage = images[x, y];
+                }
+                //Второе нажатие
+                else
+                {
+                    if (IsSamePlase(x, y))
+                    {
+                        GameField.UnselectCell();
+                        IsSomeSelected = false;
+
+                        StopImageAnimation(AnimatedImage);
+                        AnimatedImage = null;
+                    }
+                    else
+                    {
+                        if (IsNeighbors(x, y))
+                        {
+                            isAnimationGoing = true;
+
+                            //Снятие выделения
+                            StopImageAnimation(AnimatedImage);
+                            IsSomeSelected = false;
+
+                            //Логическая замена ячеек
+                            GameField.SwapCells(GameField.cells[x, y], GameField.cells[selectedX, selectedY]);                
+
+                            //Графическая замена ячеек
+                            StartImageAnimation(AnimatedImage, Animations.Disappearance);
+                            StartImageAnimation(images[x, y], Animations.Disappearance);
+                            await Task.Delay(500);
+
+                            DefineImage(GameField.cells[x, y], images[x, y]);
+                            DefineImage(GameField.cells[selectedX, selectedY], images[selectedX, selectedY]);
+
+                            StartImageAnimation(AnimatedImage, Animations.Appearance);
+                            StartImageAnimation(images[x, y], Animations.Appearance);
+                            await Task.Delay(500);
+
+                            StopImageAnimation(AnimatedImage);
+                            StopImageAnimation(images[x, y]);
+
+                            GameField.CheckAllCells();
+                            GameField.FillVoids();
+
+                            DefineImages();
+
+                            AnimatedImage = null;
+
+                            
+
+                            isAnimationGoing = false;
+                        }
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Начало анимации выбора в указанной ячейке
+        /// </summary>
+        /// <param name="image">Ячейка</param>
+        public void StartImageAnimation(Image image, DoubleAnimation doubleAnimation)
+        {
+            image.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
+        }
+
+        /// <summary>
+        /// Завершает анимацию выбранной ячейки
+        /// </summary>
+        /// <param name="image">Ячейка</param>
+        public void StopImageAnimation(Image image)
+        {
+            image.BeginAnimation(UIElement.OpacityProperty, null);
+        }
+
+        public bool IsSamePlase(int x,int y)
+        {
+
+            if (selectedX == x && selectedY == y)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public bool IsNeighbors(int x, int y)
+        {
+            bool left = true;
+            bool right = true;
+            bool up = true;
+            bool down = true;
+
+            //Left
+            if (x - 1 >= 0)
+            {
+                if (x - 1 != selectedX) left = false;
+            }
+            else left = false;
+            //Right
+            if (x + 1 <= 9)
+            {
+                if (x + 1 != selectedX) right = false;
+            }
+            else right = false;
+            //Up
+            if (y - 1 >= 0)
+            {
+                if (y - 1 != selectedY) up = false;
+            }
+            else up = false;
+            //Down
+            if (y + 1 <= 9)
+            {
+                if (y + 1 != selectedY) down = false;
+            }
+            else down = false;
+
+            if ((up && x == selectedX) || (down && x == selectedX) || (left && y == selectedY) || (right && y == selectedY))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        async public void SwitchImages(Image I1, Image I2)
+        {
+
+            StartImageAnimation(I1, Animations.Disappearance);
+            StartImageAnimation(I2, Animations.Disappearance);
+            await Task.Delay(500);
+            StartImageAnimation(I1, Animations.Appearance);
+            StartImageAnimation(I2, Animations.Appearance);
+            await Task.Delay(500);
+
         }
     }
 }
