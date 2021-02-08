@@ -126,6 +126,7 @@ namespace Match_three_WPF
                 ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
 
                 StartImageAnimation(image, Animations.Appearance);
+                await Task.Delay(500);
             }
         }
 
@@ -242,15 +243,13 @@ namespace Match_three_WPF
                             StopImageAnimation(AnimatedImage);
                             StopImageAnimation(images[x, y]);
 
-                            GameField.CheckAllCells();
-                            GameField.FillVoids();
 
+
+                            GameField.CheckAllCells();                            
+                            GameField.FillVoids();
                             DefineImages();
 
-                            AnimatedImage = null;
-
-                            
-
+                            AnimatedImage = null;                         
                             isAnimationGoing = false;
                         }
                     }
@@ -329,18 +328,6 @@ namespace Match_three_WPF
             {
                 return false;
             }
-        }
-
-        async public void SwitchImages(Image I1, Image I2)
-        {
-
-            StartImageAnimation(I1, Animations.Disappearance);
-            StartImageAnimation(I2, Animations.Disappearance);
-            await Task.Delay(500);
-            StartImageAnimation(I1, Animations.Appearance);
-            StartImageAnimation(I2, Animations.Appearance);
-            await Task.Delay(500);
-
         }
     }
 }
