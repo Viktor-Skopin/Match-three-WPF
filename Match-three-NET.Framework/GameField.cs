@@ -64,7 +64,7 @@ namespace Match_three_NET.Framework
         /// </summary>
         /// <param name="random">Random который должен быть инициализирован вне цикла</param>
         /// <returns></returns>
-        private Figure GetRandomFigure(Random random)
+        public Figure GetRandomFigure(Random random)
         {
             Array values = Enum.GetValues(typeof(Figure));
             
@@ -267,6 +267,20 @@ namespace Match_three_NET.Framework
             }
         }
 
+        public void PutDownFiguresOnes()
+        {
+            for (int x = 0; x < cells.GetLength(0); x++)
+            {
+                for (int y = 1; y < cells.GetLength(1); y++)
+                {
+                    if (cells[x, y].figure == Figure.Empty && cells[x, y - 1].figure != Figure.Empty)
+                    {
+                        SwapCells(cells[x, y], cells[x, y - 1]);
+                    }
+                }
+            }
+        }
+
         /// <summary>
         /// Создаёт новые фигурки на месте пустых
         /// </summary>
@@ -317,21 +331,6 @@ namespace Match_three_NET.Framework
                 MakeNewFigures();
                 CheckAllCells();
                 PutDownFigures();
-            }
-            //DefineAllImages();
-        }
-
-        /// <summary>
-        /// Определить изображение для каждой ячейки
-        /// </summary>
-        public void DefineAllImages()
-        {
-            for (int x = 0; x < cells.GetLength(0); x++)
-            {
-                for (int y = 0; y < cells.GetLength(1); y++)
-                {
-                    //cells[x, y].DefineImage();
-                }
             }
         }
     }
