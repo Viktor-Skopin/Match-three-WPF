@@ -23,8 +23,6 @@ namespace Match_three_WPF
         /// Кнопки
         /// </summary>
         Button[,] buttons;
-
-        Figure[,] figures;
         /// <summary>
         /// Графическое игровое поле
         /// </summary>
@@ -107,10 +105,12 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="cell">Логическая ячейка</param>
         /// <param name="image">Графическая ячейка</param>
-        public void DefineImage(Cell cell, Image image)
-        {            
+        async public void DefineImage(Cell cell, Image image)
+        {
             if(cell.figure == Figure.Empty)
             {                
+                StartImageAnimation(image, Animations.Disappearance);
+                await Task.Delay(500);
                 image.Source = null;
                 ImageBehavior.SetAnimatedSource(image, null);
             }
@@ -124,26 +124,9 @@ namespace Match_three_WPF
 
                 ImageBehavior.SetAnimatedSource(image, BMI);
                 ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
-            }
-        }
 
-        public void DefineEmptyImages()
-        {
-            for (int x = 0; x < fieldSize; x++)
-            {
-                for (int y = 0; y < fieldSize; y++)
-                {
-                    Image image = images[x, y];
-
-                    BitmapImage BMI = new BitmapImage();
-                    BMI.BeginInit();
-                    BMI.UriSource = new Uri(GetFigurePath(GameField.cells[x,y].figure), UriKind.Relative);
-                    BMI.EndInit();
-                    image.Source = BMI;
-
-                    ImageBehavior.SetAnimatedSource(image, BMI);
-                    ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
-                }
+                StartImageAnimation(image, Animations.Appearance);
+                await Task.Delay(500);
             }
         }
 
@@ -198,17 +181,6 @@ namespace Match_three_WPF
             }
         }
 
-        void SyngrinizeFigures()
-        {
-            for (int x = 0; x < fieldSize; x++)
-            {
-                for (int y = 0; y < fieldSize; y++)
-                {
-                    figures[x, y] = GameField.cells[x, y].figure;
-                }
-            }
-        }
-
         /// <summary>
         /// Назатие на графическую ячейку
         /// </summary>
@@ -253,16 +225,31 @@ namespace Match_three_WPF
                             StopImageAnimation(AnimatedImage);
                             IsSomeSelected = false;
 
-                            
-                            GameField.SwapCells(GameField.cells[x, y], GameField.cells[selectedX, selectedY]);
-                            SwapImages(GameField.cells[x, y], GameField.cells[selectedX, selectedY]);
+                            //Логическая замена ячеек
+                            GameField.SwapCells(GameField.cells[x, y], GameField.cells[selectedX, selectedY]);                
 
-                            GameField.CheckAllCells();
-                            await FillVoids();
-                            
-                            DefineEmptyImages();
+                            //Графическая замена ячеек
+                            StartImageAnimation(AnimatedImage, Animations.Disappearance);
+                            StartImageAnimation(images[x, y], Animations.Disappearance);
+                            await Task.Delay(500);
 
-                            AnimatedImage = null;
+                            DefineImage(GameField.cells[x, y], images[x, y]);
+                            DefineImage(GameField.cells[selectedX, selectedY], images[selectedX, selectedY]);
+
+                            StartImageAnimation(AnimatedImage, Animations.Appearance);
+                            StartImageAnimation(images[x, y], Animations.Appearance);
+                            await Task.Delay(500);
+
+                            StopImageAnimation(AnimatedImage);
+                            StopImageAnimation(images[x, y]);
+
+
+
+                            GameField.CheckAllCells();                            
+                            GameField.FillVoids();
+                            DefineImages();
+
+                            AnimatedImage = null;                         
                             isAnimationGoing = false;
                         }
                     }
@@ -270,111 +257,6 @@ namespace Match_three_WPF
             }
         }
 
-        async public Task FillVoids()
-        {
-            CheckAllCells();
-            PutDownFigures();
-
-            while (GameField.HaveEmptyFigeres())
-            {
-                await MakeNewFigures();
-                CheckAllCells();
-                PutDownFigures();
-            }
-        }
-
-        public void CheckAllCells()
-        {
-            for (int x = 0; x < fieldSize; x++)
-            {
-                for (int y = 0; y < fieldSize; y++)
-                {
-                    GameField.MatchCheckDown(GameField.cells[x, y]);
-                    GameField.MatchCheckRight(GameField.cells[x, y]);
-                }
-            }
-            DeleteMarkedCells();
-        }
-
-        public void DeleteMarkedCells()
-        {
-            for (int x = 0; x < fieldSize; x++)
-            {
-                for (int y = 0; y < fieldSize; y++)
-                {
-                    CheckDeletionMarked(GameField.cells[x, y]);
-                }
-            }
-        }
-
-        async void CheckDeletionMarked(Cell cell)
-        {
-            if (cell.IsMarkedForDeletion)
-            {
-                cell.figure = Figure.Empty;
-                cell.IsMarkedForDeletion = false;
-
-                StartImageAnimation(images[cell.X, cell.Y], Animations.Disappearance);
-                await Task.Delay(500);
-            }
-        }
-
-        async public Task MakeNewFigures()
-        {
-            Random random = new Random();
-
-            for (int x = 0; x < GameField.cells.GetLength(0); x++)
-            {
-                for (int y = 0; y < GameField.cells.GetLength(1); y++)
-                {
-                    if (GameField.cells[x, y].figure == Figure.Empty)
-                    {
-                        StartImageAnimation(images[x, y], Animations.Disappearance);
-                        await Task.Delay(500);                       
-
-                        GameField.cells[x, y].figure = GameField.GetRandomFigure(random);
-
-                        StartImageAnimation(images[x, y], Animations.Appearance);
-                        await Task.Delay(500);
-                    }
-                }
-            }
-        }
-
-        public void PutDownFigures()
-        {
-            for (int x = 0; x < GameField.cells.GetLength(0); x++)
-            {
-                for (int y = 1; y < GameField.cells.GetLength(1); y++)
-                {
-                    if (GameField.cells[x, y].figure == Figure.Empty && GameField.cells[x, y - 1].figure != Figure.Empty)
-                    {
-                        SwapImages(GameField.cells[x, y], GameField.cells[x, y - 1]);
-                    }
-                }
-            }
-        }
-
-
-        async public void SwapImages(Cell firstCell, Cell secondCell)
-        {
-            int X1 = firstCell.X;
-            int Y1 = firstCell.Y;
-            int X2 = secondCell.X;
-            int Y2 = secondCell.Y;
-           
-            StartImageAnimation(images[X1, Y1], Animations.Disappearance);
-            StartImageAnimation(images[X2, Y2], Animations.Disappearance);
-            await Task.Delay(500);
-
-            GameField.SwapCells(firstCell, secondCell);
-            DefineImage(firstCell, images[X1, Y1]);
-            DefineImage(secondCell, images[X2, Y2]);
-
-            StartImageAnimation(images[X1, Y1], Animations.Appearance);
-            StartImageAnimation(images[X2, Y2], Animations.Appearance);
-            await Task.Delay(500);
-        }
         /// <summary>
         /// Начало анимации выбора в указанной ячейке
         /// </summary>
