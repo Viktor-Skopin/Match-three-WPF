@@ -1,14 +1,14 @@
-﻿using System;
+﻿using Match_three_NET.Framework;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Media.Imaging;
 using System.Windows.Media;
 using System.Windows.Media.Animation;
-using Match_three_NET.Framework;
+using System.Windows.Media.Imaging;
 using WpfAnimatedGif;
 
 namespace Match_three_WPF
@@ -18,7 +18,7 @@ namespace Match_three_WPF
         /// <summary>
         /// Изображения
         /// </summary>
-        Image[,] images;
+        MTImage[,] images;
         /// <summary>
         /// Кнопки
         /// </summary>
@@ -30,32 +30,11 @@ namespace Match_three_WPF
         /// <summary>
         /// Логической егровое поле
         /// </summary>
-        GameField GameField;
-        /// <summary>
-        /// Размер игрового поля
-        /// </summary>
-        int fieldSize;
+        private GameField GameField;
         /// <summary>
         /// Изображение, которое анимируется в данный момент
         /// </summary>
-        Image AnimatedImage;
-        /// <summary>
-        /// Выбрана ли какая либо ячейка
-        /// </summary>
-        bool IsSomeSelected;
-        /// <summary>
-        /// Координата X выбранной ячейки
-        /// </summary>
-        int selectedX;
-        /// <summary>
-        /// Координата Y выбранной ячейки
-        /// </summary>
-        int selectedY;
-
-        /// <summary>
-        /// Происходит ли в данный момент анимация
-        /// </summary>
-        bool isAnimationGoing = false;
+        private MTImage AnimatedImage;
 
         /// <summary>
         /// Конструктор
@@ -66,36 +45,54 @@ namespace Match_three_WPF
         {
             GameFieldControl = FieldGrid;
             GameField = new GameField(size);
-            fieldSize = size;
 
-            images = new Image[size, size];
+            images = new MTImage[size, size];
             buttons = new Button[size, size];
 
             for (int x = 0; x < size; x++)
             {
                 for (int y = 0; y < size; y++)
                 {
-                    images[x, y] = new Image();
+                    images[x, y] = new MTImage()
+                    {
+                        X = x,
+                        Y = y,
+                        figure = GameField.cells[x, y].figure
+                    };
                     buttons[x, y] = new Button();
                     buttons[x, y].Content = images[x, y];
                     buttons[x, y].Click += CellClick;
                 }
             }
 
-            DefineImages();
+            DefineAllImages();
             PrepareGrid();
         }
 
         /// <summary>
         /// Присвоение всем ячейкам соответствующего изображения
         /// </summary>
-        public void DefineImages()
+        public void DefineAllImages()
         {
-            for (int x = 0; x < fieldSize; x++)
+            for (int x = 0; x < GameField.fieldSize; x++)
             {
-                for (int y = 0; y < fieldSize; y++)
+                for (int y = 0; y < GameField.fieldSize; y++)
                 {
-                    DefineImage(GameField.cells[x, y], images[x, y]);                   
+                    DefineImage(images[x, y]);
+                }
+            }
+        }
+
+        public void DefineChangedImages()
+        {
+            for (int x = 0; x < GameField.fieldSize; x++)
+            {
+                for (int y = 0; y < GameField.fieldSize; y++)
+                {
+                    if (GameField.cells[x, y].IsChanged)
+                    {
+                        DefineImage(images[x, y]);
+                    }                    
                 }
             }
         }
@@ -105,12 +102,13 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="cell">Логическая ячейка</param>
         /// <param name="image">Графическая ячейка</param>
-        async public void DefineImage(Cell cell, Image image)
+        public void DefineImage(MTImage image)
         {
-            if(cell.figure == Figure.Empty)
-            {                
-                StartImageAnimation(image, Animations.Disappearance);
-                await Task.Delay(500);
+            int X = image.X;
+            int Y = image.Y;
+
+            if (GameField.cells[X, Y].figure == Figure.Empty)
+            {
                 image.Source = null;
                 ImageBehavior.SetAnimatedSource(image, null);
             }
@@ -118,15 +116,12 @@ namespace Match_three_WPF
             {
                 BitmapImage BMI = new BitmapImage();
                 BMI.BeginInit();
-                BMI.UriSource = new Uri(GetFigurePath(cell.figure), UriKind.Relative);
+                BMI.UriSource = new Uri(GetFigurePath(GameField.cells[X, Y].figure), UriKind.Relative);
                 BMI.EndInit();
                 image.Source = BMI;
 
                 ImageBehavior.SetAnimatedSource(image, BMI);
                 ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
-
-                StartImageAnimation(image, Animations.Appearance);
-                await Task.Delay(500);
             }
         }
 
@@ -162,16 +157,16 @@ namespace Match_three_WPF
         public void PrepareGrid()
         {
             //Разбиение грида на столбцы и строки
-            for (int i = 0; i < fieldSize; i++)
+            for (int i = 0; i < GameField.fieldSize; i++)
             {
                 GameFieldControl.ColumnDefinitions.Add(new ColumnDefinition());
                 GameFieldControl.RowDefinitions.Add(new RowDefinition());
             }
 
             //Присвоение кнопок гриду
-            for (int x = 0; x < fieldSize; x++)
+            for (int x = 0; x < GameField.fieldSize; x++)
             {
-                for (int y = 0; y < fieldSize; y++)
+                for (int y = 0; y < GameField.fieldSize; y++)
                 {
                     Grid.SetColumn(buttons[x, y], x);
                     Grid.SetRow(buttons[x, y], y);
@@ -182,76 +177,74 @@ namespace Match_three_WPF
         }
 
         /// <summary>
-        /// Назатие на графическую ячейку
+        /// Нажатие на графическую ячейку
         /// </summary>
-        async public void CellClick(object sender, EventArgs e)
+        public void CellClick(object sender, EventArgs e)
         {
             //Извлечение координат
             int x = Grid.GetColumn(sender as Button);
             int y = Grid.GetRow(sender as Button);
-            if(isAnimationGoing == false)
-            {
-                //Первое нажатие
-                if (IsSomeSelected == false)
-                {
-                    //Логика
-                    GameField.SelectCell(x, y);
-                    IsSomeSelected = true;
 
-                    selectedX = x;
-                    selectedY = y;
-                    //Анимация
-                    StartImageAnimation(images[x, y], Animations.Selection);
-                    AnimatedImage = images[x, y];
+
+            //Первое нажатие
+            if (GameField.IsSomeSelected == false)
+            {
+                //Логика
+                GameField.SelectCell(x, y);
+                GameField.IsSomeSelected = true;
+
+                //Анимация
+                StartImageAnimation(images[x, y], Animations.Selection);
+                AnimatedImage = images[x, y];
+            }
+            //Второе нажатие
+            else
+            {
+                if (GameField.IsSamePlase(x, y))
+                {
+                    GameField.UnselectCell();
+                    GameField.IsSomeSelected = false;
+
+                    StopImageAnimation(AnimatedImage);
+                    AnimatedImage = null;
                 }
-                //Второе нажатие
                 else
                 {
-                    if (IsSamePlase(x, y))
+                    if (GameField.IsNeighbors(x, y))
                     {
-                        GameField.UnselectCell();
-                        IsSomeSelected = false;
-
+                        //Снятие выделения
                         StopImageAnimation(AnimatedImage);
-                        AnimatedImage = null;
-                    }
-                    else
-                    {
-                        if (IsNeighbors(x, y))
+                        GameField.IsSomeSelected = false;
+
+                        //Логическая замена ячеек
+                        GameField.SwapCells(GameField.cells[x, y], GameField.cells[AnimatedImage.X, AnimatedImage.Y]);
+
+                        //Проверка на ложное нажатие
+                        if (GameField.IsFalseMove())
                         {
-                            isAnimationGoing = true;
-
-                            //Снятие выделения
-                            StopImageAnimation(AnimatedImage);
-                            IsSomeSelected = false;
-
-                            //Логическая замена ячеек
-                            GameField.SwapCells(GameField.cells[x, y], GameField.cells[selectedX, selectedY]);                
-
-                            //Графическая замена ячеек
-                            StartImageAnimation(AnimatedImage, Animations.Disappearance);
-                            StartImageAnimation(images[x, y], Animations.Disappearance);
-                            await Task.Delay(500);
-
-                            DefineImage(GameField.cells[x, y], images[x, y]);
-                            DefineImage(GameField.cells[selectedX, selectedY], images[selectedX, selectedY]);
-
-                            StartImageAnimation(AnimatedImage, Animations.Appearance);
-                            StartImageAnimation(images[x, y], Animations.Appearance);
-                            await Task.Delay(500);
+                            GameField.SwapCells(GameField.cells[x, y], GameField.cells[AnimatedImage.X, AnimatedImage.Y]);
+                            GameField.IsSomeSelected = false;
 
                             StopImageAnimation(AnimatedImage);
                             StopImageAnimation(images[x, y]);
 
-
-
-                            GameField.CheckAllCells();                            
-                            GameField.FillVoids();
-                            DefineImages();
-
-                            AnimatedImage = null;                         
-                            isAnimationGoing = false;
+                            return;
                         }
+
+
+                        //Графическая замена ячеек
+                        DefineImage(images[x, y]);
+                        DefineImage(images[AnimatedImage.X, AnimatedImage.Y]);
+
+                        StopImageAnimation(AnimatedImage);
+                        StopImageAnimation(images[x, y]);
+
+                        GameField.CheckAllCells();
+
+                        GameField.FillVoids();
+                        DefineChangedImages();
+
+                        AnimatedImage = null;
                     }
                 }
             }
@@ -273,61 +266,6 @@ namespace Match_three_WPF
         public void StopImageAnimation(Image image)
         {
             image.BeginAnimation(UIElement.OpacityProperty, null);
-        }
-
-        public bool IsSamePlase(int x,int y)
-        {
-
-            if (selectedX == x && selectedY == y)
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-
-        public bool IsNeighbors(int x, int y)
-        {
-            bool left = true;
-            bool right = true;
-            bool up = true;
-            bool down = true;
-
-            //Left
-            if (x - 1 >= 0)
-            {
-                if (x - 1 != selectedX) left = false;
-            }
-            else left = false;
-            //Right
-            if (x + 1 <= 9)
-            {
-                if (x + 1 != selectedX) right = false;
-            }
-            else right = false;
-            //Up
-            if (y - 1 >= 0)
-            {
-                if (y - 1 != selectedY) up = false;
-            }
-            else up = false;
-            //Down
-            if (y + 1 <= 9)
-            {
-                if (y + 1 != selectedY) down = false;
-            }
-            else down = false;
-
-            if ((up && x == selectedX) || (down && x == selectedX) || (left && y == selectedY) || (right && y == selectedY))
-            {
-                return true;
-            }
-            else
-            {
-                return false;
-            }
         }
     }
 }

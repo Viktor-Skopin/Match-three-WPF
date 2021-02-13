@@ -62,6 +62,7 @@
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="MTImage.cs" />
     <Compile Include="Visualizer.cs" />
     <Page Include="GameWindow.xaml">
       <SubType>Designer</SubType>

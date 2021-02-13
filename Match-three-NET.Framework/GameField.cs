@@ -18,12 +18,12 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Размер поля
         /// </summary>
-        private int fieldSize;
+        public int fieldSize;
 
         /// <summary>
         /// Выбрана ли какая либо ячейка
         /// </summary>
-        private bool IsSomeSelected = false;
+        public bool IsSomeSelected = false;
 
         /// <summary>
         /// Ссылка на выбранную ячейку в массиве
@@ -67,8 +67,8 @@ namespace Match_three_NET.Framework
         private Figure GetRandomFigure(Random random)
         {
             Array values = Enum.GetValues(typeof(Figure));
-            
-            Figure randomFigure = (Figure)values.GetValue(random.Next(1,values.Length));
+
+            Figure randomFigure = (Figure)values.GetValue(random.Next(1, values.Length));
             return randomFigure;
         }
 
@@ -136,9 +136,9 @@ namespace Match_three_NET.Framework
         /// </summary>
         public void CheckAllCells()
         {
-            for (int x = 0; x < cells.GetLength(0); x++)
+            for (int x = 0; x < fieldSize; x++)
             {
-                for (int y = 0; y < cells.GetLength(1); y++)
+                for (int y = 0; y < fieldSize; y++)
                 {
                     MatchCheckDown(cells[x, y]);
                     MatchCheckRight(cells[x, y]);
@@ -164,7 +164,7 @@ namespace Match_three_NET.Framework
             while (true)
             {
 
-                if (i <= (fieldSize-1) && cells[X, i].figure == figure)
+                if (i <= (fieldSize - 1) && cells[X, i].figure == figure)
                 {
                     count++;
                     i++;
@@ -180,6 +180,7 @@ namespace Match_three_NET.Framework
                 for (int j = Y; j < i; j++)
                 {
                     cells[X, j].IsMarkedForDeletion = true;
+                    cells[X, j].IsChanged = true;
                 }
             }
         }
@@ -200,7 +201,7 @@ namespace Match_three_NET.Framework
             while (true)
             {
 
-                if (i <= (fieldSize-1) && cells[i, Y].figure == figure)
+                if (i <= (fieldSize - 1) && cells[i, Y].figure == figure)
                 {
                     count++;
                     i++;
@@ -216,6 +217,7 @@ namespace Match_three_NET.Framework
                 for (int j = X; j < i; j++)
                 {
                     cells[j, Y].IsMarkedForDeletion = true;
+                    cells[j, Y].IsChanged = true;
                 }
             }
         }
@@ -225,24 +227,23 @@ namespace Match_three_NET.Framework
         /// </summary>
         public void DeleteMarkedCells()
         {
-            for (int x = 0; x < cells.GetLength(0); x++)
+            for (int x = 0; x < fieldSize; x++)
             {
-                for (int y = 0; y < cells.GetLength(1); y++)
+                for (int y = 0; y < fieldSize; y++)
                 {
-                    CheckDeletionMarked(cells[x, y]);
+                    DeleteCell(cells[x, y]);
                 }
             }
         }
 
         /// <summary>
-        /// Отмечает помеченные ячейки как пустые
+        /// Очищает ячейку если она помечена на удаление
         /// </summary>
-        public void CheckDeletionMarked(Cell cell)
+        public void DeleteCell(Cell cell)
         {
             if (cell.IsMarkedForDeletion)
             {
                 cell.figure = Figure.Empty;
-
                 cell.IsMarkedForDeletion = false;
             }
         }
@@ -252,15 +253,18 @@ namespace Match_three_NET.Framework
         /// </summary>
         public void PutDownFigures()
         {
-            for (int i = 1; i < cells.GetLength(1); i++)
+            for (int i = 1; i < fieldSize; i++)
             {
-                for (int x = 0; x < cells.GetLength(0); x++)
+                for (int x = 0; x < fieldSize; x++)
                 {
-                    for (int y = 1; y < cells.GetLength(1); y++)
+                    for (int y = 1; y < fieldSize; y++)
                     {
                         if (cells[x, y].figure == Figure.Empty && cells[x, y - 1].figure != Figure.Empty)
                         {
                             SwapCells(cells[x, y], cells[x, y - 1]);
+
+                            cells[x, y].IsChanged = true;
+                            cells[x, y - 1].IsChanged = true;
                         }
                     }
                 }
@@ -274,9 +278,9 @@ namespace Match_three_NET.Framework
         {
             Random random = new Random();
 
-            for (int x = 0; x < cells.GetLength(0); x++)
+            for (int x = 0; x < fieldSize; x++)
             {
-                for (int y = 0; y < cells.GetLength(1); y++)
+                for (int y = 0; y < fieldSize; y++)
                 {
                     if (cells[x, y].figure == Figure.Empty)
                     {
@@ -291,9 +295,9 @@ namespace Match_three_NET.Framework
         /// </summary>
         public bool HaveEmptyFigeres()
         {
-            for (int x = 0; x < cells.GetLength(0); x++)
+            for (int x = 0; x < fieldSize; x++)
             {
-                for (int y = 0; y < cells.GetLength(1); y++)
+                for (int y = 0; y < fieldSize; y++)
                 {
                     if (cells[x, y].figure == Figure.Empty)
                     {
@@ -318,21 +322,99 @@ namespace Match_three_NET.Framework
                 CheckAllCells();
                 PutDownFigures();
             }
-            //DefineAllImages();
+        }
+
+        public bool IsNeighbors(int x, int y)
+        {
+            bool left = true;
+            bool right = true;
+            bool up = true;
+            bool down = true;
+
+            //Left
+            if (x - 1 >= 0)
+            {
+                if (x - 1 != ChosenCell.X) left = false;
+            }
+            else left = false;
+            //Right
+            if (x + 1 <= 9)
+            {
+                if (x + 1 != ChosenCell.X) right = false;
+            }
+            else right = false;
+            //Up
+            if (y - 1 >= 0)
+            {
+                if (y - 1 != ChosenCell.Y) up = false;
+            }
+            else up = false;
+            //Down
+            if (y + 1 <= 9)
+            {
+                if (y + 1 != ChosenCell.Y) down = false;
+            }
+            else down = false;
+
+            if ((up && x == ChosenCell.X) || (down && x == ChosenCell.X) || (left && y == ChosenCell.Y) || (right && y == ChosenCell.Y))
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
 
         /// <summary>
-        /// Определить изображение для каждой ячейки
+        /// Проверка, совпают ли координаты с координатами выбранной ячейки
         /// </summary>
-        public void DefineAllImages()
+        public bool IsSamePlase(int x, int y)
         {
-            for (int x = 0; x < cells.GetLength(0); x++)
+            if (ChosenCell.X == x && ChosenCell.Y == y)
             {
-                for (int y = 0; y < cells.GetLength(1); y++)
+                return true;
+            }
+            else
+            {
+                return false;
+            }
+        }
+
+        public void RemoveAllChanges()
+        {
+            for (int x = 0; x < fieldSize; x++)
+            {
+                for (int y = 0; y < fieldSize; y++)
                 {
-                    //cells[x, y].DefineImage();
+                    if (cells[x, y].IsChanged)
+                    {
+                        cells[x, y].IsChanged = false;
+                    }
                 }
             }
+        }
+
+        public bool IsFalseMove()
+        {
+            for (int x = 0; x < fieldSize; x++)
+            {
+                for (int y = 0; y < fieldSize; y++)
+                {
+                    MatchCheckDown(cells[x, y]);
+                    MatchCheckRight(cells[x, y]);
+                }
+            }
+
+            for (int x = 0; x < fieldSize; x++)
+            {
+                for (int y = 0; y < fieldSize; y++)
+                {
+                    if (cells[x, y].IsMarkedForDeletion) return false;
+                }
+            }
+
+            return true;
         }
     }
 }

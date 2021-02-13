@@ -32,6 +32,8 @@ namespace Match_three_NET.Framework
         /// </summary>
         public bool IsMarkedForDeletion { get; set; }
 
+        public bool IsChanged { get; set; }
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -41,6 +43,7 @@ namespace Match_three_NET.Framework
             Y = y;
             IsSelected = false;
             IsMarkedForDeletion = false;
+            IsChanged = false;
             figure = Figure.Empty;
         }
 
@@ -58,21 +61,6 @@ namespace Match_three_NET.Framework
         public void UnSelect()
         {
             IsSelected = false;
-        }
-
-        /// <summary>
-        /// Переключить выбор ячейки
-        /// </summary>
-        public void SwitchSelection()
-        {
-            if (IsSelected)
-            {
-                IsSelected = false;
-            }
-            else
-            {
-                IsSelected = true;
-            }
         }
     }
 }
