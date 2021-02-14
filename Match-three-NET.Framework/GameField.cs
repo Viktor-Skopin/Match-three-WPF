@@ -30,6 +30,8 @@ namespace Match_three_NET.Framework
         /// </summary>
         private Cell ChosenCell;
 
+        public int Points { get; set; }
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -38,6 +40,7 @@ namespace Match_three_NET.Framework
         {
             cells = new Cell[size, size];
             fieldSize = size;
+            Points = 0;
 
             for (int x = 0; x < size; x++)
             {
@@ -48,6 +51,7 @@ namespace Match_three_NET.Framework
             }
 
             StartNewGame();
+            Points = 0;
         }
 
         /// <summary>
@@ -245,6 +249,7 @@ namespace Match_three_NET.Framework
             {
                 cell.figure = Figure.Empty;
                 cell.IsMarkedForDeletion = false;
+                Points += 1;
             }
         }
 

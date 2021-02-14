@@ -24,7 +24,7 @@ namespace Match_three_WPF
         {
             InitializeComponent();
 
-            MatchThree = new Visualizer(GameFieldGrid, 10);
+            MatchThree = new Visualizer(GameFieldGrid, 10, PointsLabel);
         }
     }
 }

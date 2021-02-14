@@ -36,6 +36,8 @@ namespace Match_three_WPF
         /// </summary>
         private MTImage AnimatedImage;
 
+        private Label Points;
+
         private bool IsAnimationGoing = false;
 
         /// <summary>
@@ -43,10 +45,11 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="FieldGrid">Игровое поле</param>
         /// <param name="size">Размер игрового поля</param>
-        public Visualizer(Grid FieldGrid, int size)
+        public Visualizer(Grid FieldGrid, int size, Label label)
         {
             GameFieldControl = FieldGrid;
             GameField = new GameField(size);
+            Points = label;
 
             Images = new MTImage[size, size];
             Buttons = new Button[size, size];
@@ -59,9 +62,13 @@ namespace Match_three_WPF
                     {
                         X = x,
                         Y = y,
-                        figure = GameField.cells[x, y].figure
+                        figure = GameField.cells[x, y].figure                     
                     };
-                    Buttons[x, y] = new Button();
+                    Buttons[x, y] = new Button()
+                    {
+                        Background = Brushes.Transparent
+                        
+                    };
                     Buttons[x, y].Content = Images[x, y];
                     Buttons[x, y].Click += CellClick;
                 }
@@ -69,6 +76,11 @@ namespace Match_three_WPF
 
             DefineAllImages();
             PrepareGrid();
+        }
+
+        private void UpdatePointsLabel()
+        {
+            Points.Content = GameField.Points;
         }
 
         /// <summary>
@@ -81,20 +93,6 @@ namespace Match_three_WPF
                 for (int y = 0; y < GameField.fieldSize; y++)
                 {
                     DefineImage(Images[x, y]);
-                }
-            }
-        }
-
-        private void DefineChangedImages()
-        {
-            for (int x = 0; x < GameField.fieldSize; x++)
-            {
-                for (int y = 0; y < GameField.fieldSize; y++)
-                {
-                    if (GameField.cells[x, y].IsChanged)
-                    {
-                        DefineImage(Images[x, y]);
-                    }
                 }
             }
         }
@@ -218,9 +216,9 @@ namespace Match_three_WPF
 
             GameField.CheckAllCells();
             GameField.DeleteMarkedCells();
-
+            UpdatePointsLabel();
             await PutDownFigures();
-
+            
             do
             {
                 GameField.MakeNewFigures();
@@ -228,12 +226,15 @@ namespace Match_three_WPF
 
                 GameField.CheckAllCells();
                 GameField.DeleteMarkedCells();
+                UpdatePointsLabel();
                 await PutDownFigures();
+                
             } 
             while (GameField.HaveEmptyFigeres());
 
             await DefineAllImagesAnim();
 
+            UpdatePointsLabel();
             AnimatedImage = null;
         }
 
@@ -354,7 +355,7 @@ namespace Match_three_WPF
                     AnimatedDefineImage(Images[x, y]);
                 }
             }
-            await Task.Delay(1050);
+            await Task.Delay(450);
         }
         /// <summary>
         /// Анимированно меняет язображение на актуальное
@@ -367,8 +368,8 @@ namespace Match_three_WPF
 
             if (GameField.cells[X, Y].figure == Figure.Empty)
             {
-                StartImageAnimation(image, Animations.Disappearance);
-                await Task.Delay(500);
+                StartImageAnimation(image, Animations.QuickDisappearance);
+                await Task.Delay(200);
 
                 image.Source = null;
                 ImageBehavior.SetAnimatedSource(image, null);
@@ -381,8 +382,8 @@ namespace Match_three_WPF
             }
             else if (GameField.cells[X, Y].IsChanged)
             {
-                StartImageAnimation(image, Animations.Disappearance);
-                await Task.Delay(500);
+                StartImageAnimation(image, Animations.QuickDisappearance);
+                await Task.Delay(200);
 
                 BitmapImage BMI = new BitmapImage();
                 BMI.BeginInit();
@@ -392,8 +393,8 @@ namespace Match_three_WPF
                 ImageBehavior.SetAnimatedSource(image, BMI);
                 ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
 
-                StartImageAnimation(image, Animations.Appearance);
-                await Task.Delay(500);
+                StartImageAnimation(image, Animations.QuickAppearance);
+                await Task.Delay(200);
 
                 GameField.cells[X, Y].IsChanged = false;
             }
@@ -401,21 +402,6 @@ namespace Match_three_WPF
             {
 
             }
-        }
-
-        private async Task DefineChangedImagesAnim()
-        {
-            for (int x = 0; x < GameField.fieldSize; x++)
-            {
-                for (int y = 0; y < GameField.fieldSize; y++)
-                {
-                    if (GameField.cells[x, y].IsChanged)
-                    {
-                        AnimatedDefineImage(Images[x, y]);
-                    }
-                }
-            }
-            await Task.Delay(1000);
         }
     }
 }

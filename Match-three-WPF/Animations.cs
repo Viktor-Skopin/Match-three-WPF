@@ -41,5 +41,27 @@ namespace Match_three_WPF
             Duration = TimeSpan.FromSeconds(0.5),
             AutoReverse = false
         };
+
+        /// <summary>
+        /// Анимация пропадания фигуры
+        /// </summary>
+        public static readonly DoubleAnimation QuickDisappearance = new DoubleAnimation()
+        {
+            From = 1.0,
+            To = 0.0,
+            Duration = TimeSpan.FromSeconds(0.2),
+            AutoReverse = false
+        };
+
+        /// <summary>
+        /// Анимация появления фигуры
+        /// </summary>
+        public static readonly DoubleAnimation QuickAppearance = new DoubleAnimation()
+        {
+            From = 0.0,
+            To = 1.0,
+            Duration = TimeSpan.FromSeconds(0.2),
+            AutoReverse = false
+        };
     }
 }
