@@ -56,6 +56,9 @@ namespace Match_three_NET.Framework
         public void StartNewGame()
         {
             DefineFigures();
+            CheckAllCells();
+            DeleteMarkedCells();
+            PutDownFigures();
             FillVoids();
         }
 
@@ -129,8 +132,6 @@ namespace Match_three_NET.Framework
             firstCell.figure = secondCell.figure;
             secondCell.figure = buffer;
         }
-
-
         /// <summary>
         /// Помечает подходящие ячейки на удаление
         /// </summary>
@@ -144,7 +145,6 @@ namespace Match_three_NET.Framework
                     MatchCheckRight(cells[x, y]);
                 }
             }
-            DeleteMarkedCells();
         }
 
         /// <summary>
@@ -271,6 +271,24 @@ namespace Match_three_NET.Framework
             }
         }
 
+        public void PutDownFiguresOnes()
+        {
+            for (int x = 0; x < fieldSize; x++)
+            {
+                for (int y = 1; y < fieldSize; y++)
+                {
+                    if (cells[x, y].figure == Figure.Empty && cells[x, y - 1].figure != Figure.Empty)
+                    {
+                        SwapCells(cells[x, y], cells[x, y - 1]);
+
+                        cells[x, y].IsChanged = true;
+                        //cells[x, y - 1].IsChanged = true;
+                    }
+                }
+            }
+
+        }
+
         /// <summary>
         /// Создаёт новые фигурки на месте пустых
         /// </summary>
@@ -285,6 +303,7 @@ namespace Match_three_NET.Framework
                     if (cells[x, y].figure == Figure.Empty)
                     {
                         cells[x, y].figure = GetRandomFigure(random);
+                        cells[x, y].IsChanged = true;
                     }
                 }
             }
@@ -312,18 +331,18 @@ namespace Match_three_NET.Framework
         /// Заполняет и опускает ячейки пока не останется совпадений
         /// </summary>
         public void FillVoids()
-        {
-            CheckAllCells();
-            PutDownFigures();
-
+        {           
             while (HaveEmptyFigeres())
             {
                 MakeNewFigures();
                 CheckAllCells();
+                DeleteMarkedCells();
                 PutDownFigures();
             }
         }
-
+        /// <summary>
+        /// Проверяет является ли ячейка по заданным координатам соседом выбранной ячейки
+        /// </summary>
         public bool IsNeighbors(int x, int y)
         {
             bool left = true;
@@ -381,20 +400,10 @@ namespace Match_three_NET.Framework
             }
         }
 
-        public void RemoveAllChanges()
-        {
-            for (int x = 0; x < fieldSize; x++)
-            {
-                for (int y = 0; y < fieldSize; y++)
-                {
-                    if (cells[x, y].IsChanged)
-                    {
-                        cells[x, y].IsChanged = false;
-                    }
-                }
-            }
-        }
-
+        /// <summary>
+        /// Есть ли комбинации фигур после хода
+        /// </summary>
+        /// <returns></returns>
         public bool IsFalseMove()
         {
             for (int x = 0; x < fieldSize; x++)
@@ -415,6 +424,21 @@ namespace Match_three_NET.Framework
             }
 
             return true;
+        }
+
+        public bool HasChangedCells()
+        {
+            for (int x = 0; x < fieldSize; x++)
+            {
+                for (int y = 0; y < fieldSize; y++)
+                {
+                    if (cells[x, y].IsChanged == true)
+                    {
+                        return true;
+                    }
+                }
+            }
+            return false;
         }
     }
 }

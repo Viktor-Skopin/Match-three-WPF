@@ -18,15 +18,15 @@ namespace Match_three_WPF
         /// <summary>
         /// Изображения
         /// </summary>
-        MTImage[,] images;
+        private MTImage[,] Images;
         /// <summary>
         /// Кнопки
         /// </summary>
-        Button[,] buttons;
+        private Button[,] Buttons;
         /// <summary>
         /// Графическое игровое поле
         /// </summary>
-        Grid GameFieldControl;
+        private Grid GameFieldControl;
         /// <summary>
         /// Логической егровое поле
         /// </summary>
@@ -35,6 +35,8 @@ namespace Match_three_WPF
         /// Изображение, которое анимируется в данный момент
         /// </summary>
         private MTImage AnimatedImage;
+
+        private bool IsAnimationGoing = false;
 
         /// <summary>
         /// Конструктор
@@ -46,22 +48,22 @@ namespace Match_three_WPF
             GameFieldControl = FieldGrid;
             GameField = new GameField(size);
 
-            images = new MTImage[size, size];
-            buttons = new Button[size, size];
+            Images = new MTImage[size, size];
+            Buttons = new Button[size, size];
 
             for (int x = 0; x < size; x++)
             {
                 for (int y = 0; y < size; y++)
                 {
-                    images[x, y] = new MTImage()
+                    Images[x, y] = new MTImage()
                     {
                         X = x,
                         Y = y,
                         figure = GameField.cells[x, y].figure
                     };
-                    buttons[x, y] = new Button();
-                    buttons[x, y].Content = images[x, y];
-                    buttons[x, y].Click += CellClick;
+                    Buttons[x, y] = new Button();
+                    Buttons[x, y].Content = Images[x, y];
+                    Buttons[x, y].Click += CellClick;
                 }
             }
 
@@ -72,18 +74,18 @@ namespace Match_three_WPF
         /// <summary>
         /// Присвоение всем ячейкам соответствующего изображения
         /// </summary>
-        public void DefineAllImages()
+        private void DefineAllImages()
         {
             for (int x = 0; x < GameField.fieldSize; x++)
             {
                 for (int y = 0; y < GameField.fieldSize; y++)
                 {
-                    DefineImage(images[x, y]);
+                    DefineImage(Images[x, y]);
                 }
             }
         }
 
-        public void DefineChangedImages()
+        private void DefineChangedImages()
         {
             for (int x = 0; x < GameField.fieldSize; x++)
             {
@@ -91,8 +93,8 @@ namespace Match_three_WPF
                 {
                     if (GameField.cells[x, y].IsChanged)
                     {
-                        DefineImage(images[x, y]);
-                    }                    
+                        DefineImage(Images[x, y]);
+                    }
                 }
             }
         }
@@ -102,7 +104,7 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="cell">Логическая ячейка</param>
         /// <param name="image">Графическая ячейка</param>
-        public void DefineImage(MTImage image)
+        private void DefineImage(MTImage image)
         {
             int X = image.X;
             int Y = image.Y;
@@ -123,6 +125,8 @@ namespace Match_three_WPF
                 ImageBehavior.SetAnimatedSource(image, BMI);
                 ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
             }
+
+            GameField.cells[X, Y].IsChanged = false;
         }
 
         /// <summary>
@@ -130,7 +134,7 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="figure">Фигурка</param>
         /// <returns></returns>
-        public string GetFigurePath(Figure figure)
+        private string GetFigurePath(Figure figure)
         {
             switch (figure)
             {
@@ -154,7 +158,7 @@ namespace Match_three_WPF
         /// <summary>
         /// Подготовка графического игрового поля для дальнейшей работы с ним
         /// </summary>
-        public void PrepareGrid()
+        private void PrepareGrid()
         {
             //Разбиение грида на столбцы и строки
             for (int i = 0; i < GameField.fieldSize; i++)
@@ -168,93 +172,137 @@ namespace Match_three_WPF
             {
                 for (int y = 0; y < GameField.fieldSize; y++)
                 {
-                    Grid.SetColumn(buttons[x, y], x);
-                    Grid.SetRow(buttons[x, y], y);
-                    images[x, y].Stretch = Stretch.Uniform;
-                    GameFieldControl.Children.Add(buttons[x, y]);
+                    Grid.SetColumn(Buttons[x, y], x);
+                    Grid.SetRow(Buttons[x, y], y);
+                    Images[x, y].Stretch = Stretch.Uniform;
+                    GameFieldControl.Children.Add(Buttons[x, y]);
                 }
             }
+        }
+
+        private void FirstClick(int X, int Y)
+        {
+            //Логика
+            GameField.SelectCell(X, Y);
+            GameField.IsSomeSelected = true;
+
+            //Анимация
+            StartImageAnimation(Images[X, Y], Animations.Selection);
+            AnimatedImage = Images[X, Y];
+        }
+
+        private async Task SecondClick(int X, int Y)
+        {
+            //Снятие выделения
+            StopImageAnimation(AnimatedImage);
+            GameField.IsSomeSelected = false;
+
+            await SwapImages(Images[X, Y], AnimatedImage);
+
+            //Проверка на ложное нажатие
+            if (GameField.IsFalseMove())
+            {
+                await SwapImages(Images[X, Y], AnimatedImage);
+
+                StopImageAnimation(AnimatedImage);
+                StopImageAnimation(Images[X, Y]);
+
+                GameField.IsSomeSelected = false;
+                AnimatedImage = null;
+
+                return;
+            }
+
+            StopImageAnimation(AnimatedImage);
+            StopImageAnimation(Images[X, Y]);
+
+            GameField.CheckAllCells();
+            GameField.DeleteMarkedCells();
+
+            await PutDownFigures();
+
+            do
+            {
+                GameField.MakeNewFigures();
+                await DefineAllImagesAnim();
+
+                GameField.CheckAllCells();
+                GameField.DeleteMarkedCells();
+                await PutDownFigures();
+            } 
+            while (GameField.HaveEmptyFigeres());
+
+            await DefineAllImagesAnim();
+
+            AnimatedImage = null;
+        }
+
+        private async Task PutDownFigures()
+        {
+            for (int i = 1; i < GameField.fieldSize; i++)
+            {
+                if (GameField.HasChangedCells())
+                {
+                    await DefineAllImagesAnim();
+                    GameField.PutDownFiguresOnes();
+                }               
+               
+            }
+        }
+
+        private void SameClick()
+        {
+            GameField.UnselectCell();
+            GameField.IsSomeSelected = false;
+
+            StopImageAnimation(AnimatedImage);
+            AnimatedImage = null;
         }
 
         /// <summary>
         /// Нажатие на графическую ячейку
         /// </summary>
-        public void CellClick(object sender, EventArgs e)
+        public async void CellClick(object sender, EventArgs e)
         {
+            if (IsAnimationGoing)
+            {
+                return;
+            }
+
             //Извлечение координат
             int x = Grid.GetColumn(sender as Button);
             int y = Grid.GetRow(sender as Button);
 
+            IsAnimationGoing = true;
 
             //Первое нажатие
             if (GameField.IsSomeSelected == false)
             {
-                //Логика
-                GameField.SelectCell(x, y);
-                GameField.IsSomeSelected = true;
-
-                //Анимация
-                StartImageAnimation(images[x, y], Animations.Selection);
-                AnimatedImage = images[x, y];
+                FirstClick(x, y);
             }
             //Второе нажатие
             else
             {
+                //Нажатие на ту же ячейку
                 if (GameField.IsSamePlase(x, y))
                 {
-                    GameField.UnselectCell();
-                    GameField.IsSomeSelected = false;
-
-                    StopImageAnimation(AnimatedImage);
-                    AnimatedImage = null;
+                    SameClick();
                 }
-                else
+                //Нажатие на соседнюю клетку
+                else if (GameField.IsNeighbors(x, y))
                 {
-                    if (GameField.IsNeighbors(x, y))
-                    {
-                        //Снятие выделения
-                        StopImageAnimation(AnimatedImage);
-                        GameField.IsSomeSelected = false;
-
-                        //Логическая замена ячеек
-                        GameField.SwapCells(GameField.cells[x, y], GameField.cells[AnimatedImage.X, AnimatedImage.Y]);
-
-                        //Проверка на ложное нажатие
-                        if (GameField.IsFalseMove())
-                        {
-                            GameField.SwapCells(GameField.cells[x, y], GameField.cells[AnimatedImage.X, AnimatedImage.Y]);
-                            GameField.IsSomeSelected = false;
-
-                            StopImageAnimation(AnimatedImage);
-                            StopImageAnimation(images[x, y]);
-
-                            return;
-                        }
-
-
-                        //Графическая замена ячеек
-                        DefineImage(images[x, y]);
-                        DefineImage(images[AnimatedImage.X, AnimatedImage.Y]);
-
-                        StopImageAnimation(AnimatedImage);
-                        StopImageAnimation(images[x, y]);
-
-                        GameField.CheckAllCells();
-
-                        GameField.FillVoids();
-                        DefineChangedImages();
-
-                        AnimatedImage = null;
-                    }
+                    await SecondClick(x, y);
                 }
             }
+
+            IsAnimationGoing = false;
         }
 
         /// <summary>
         /// Начало анимации выбора в указанной ячейке
         /// </summary>
         /// <param name="image">Ячейка</param>
-        public void StartImageAnimation(Image image, DoubleAnimation doubleAnimation)
+        private void StartImageAnimation(Image image, DoubleAnimation doubleAnimation)
         {
             image.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
         }
@@ -263,9 +311,111 @@ namespace Match_three_WPF
         /// Завершает анимацию выбранной ячейки
         /// </summary>
         /// <param name="image">Ячейка</param>
-        public void StopImageAnimation(Image image)
+        private void StopImageAnimation(Image image)
         {
             image.BeginAnimation(UIElement.OpacityProperty, null);
+        }
+
+        /// <summary>
+        /// Плавно меняет два изображение местами
+        /// </summary>
+        /// <param name="firstImage">Первое изображение</param>
+        /// <param name="secondImage">Второе изображение</param>
+        /// <returns></returns>
+        private async Task SwapImages(MTImage firstImage, MTImage secondImage)
+        {
+            StartImageAnimation(firstImage, Animations.Disappearance);
+            StartImageAnimation(secondImage, Animations.Disappearance);
+            await Task.Delay(500);
+
+            int x1 = firstImage.X;
+            int y1 = firstImage.Y;
+            int x2 = secondImage.X;
+            int y2 = secondImage.Y;
+
+            GameField.SwapCells(GameField.cells[x1, y1], GameField.cells[x2, y2]);
+
+            DefineImage(firstImage);
+            DefineImage(secondImage);
+
+            StartImageAnimation(firstImage, Animations.Appearance);
+            StartImageAnimation(secondImage, Animations.Appearance);
+            await Task.Delay(500);
+        }
+        /// <summary>
+        /// Анимированно меняет все изменённые изображения на актуальные
+        /// </summary>
+        private async Task DefineAllImagesAnim()
+        {
+            for (int x = 0; x < GameField.fieldSize; x++)
+            {
+                for (int y = 0; y < GameField.fieldSize; y++)
+                {
+                    AnimatedDefineImage(Images[x, y]);
+                }
+            }
+            await Task.Delay(1050);
+        }
+        /// <summary>
+        /// Анимированно меняет язображение на актуальное
+        /// </summary>
+        /// <param name="image">Изображение</param>
+        private async void AnimatedDefineImage(MTImage image)
+        {
+            int X = image.X;
+            int Y = image.Y;
+
+            if (GameField.cells[X, Y].figure == Figure.Empty)
+            {
+                StartImageAnimation(image, Animations.Disappearance);
+                await Task.Delay(500);
+
+                image.Source = null;
+                ImageBehavior.SetAnimatedSource(image, null);
+
+                StopImageAnimation(image);
+
+                
+
+                GameField.cells[X, Y].IsChanged = false;
+            }
+            else if (GameField.cells[X, Y].IsChanged)
+            {
+                StartImageAnimation(image, Animations.Disappearance);
+                await Task.Delay(500);
+
+                BitmapImage BMI = new BitmapImage();
+                BMI.BeginInit();
+                BMI.UriSource = new Uri(GetFigurePath(GameField.cells[X, Y].figure), UriKind.Relative);
+                BMI.EndInit();
+                image.Source = BMI;
+                ImageBehavior.SetAnimatedSource(image, BMI);
+                ImageBehavior.SetAnimationSpeedRatio(image, 0.2);
+
+                StartImageAnimation(image, Animations.Appearance);
+                await Task.Delay(500);
+
+                GameField.cells[X, Y].IsChanged = false;
+            }
+            else
+            {
+
+            }
+        }
+
+        private async Task DefineChangedImagesAnim()
+        {
+            for (int x = 0; x < GameField.fieldSize; x++)
+            {
+                for (int y = 0; y < GameField.fieldSize; y++)
+                {
+                    if (GameField.cells[x, y].IsChanged)
+                    {
+                        AnimatedDefineImage(Images[x, y]);
+                    }
+                }
+            }
+            await Task.Delay(1000);
         }
     }
 }

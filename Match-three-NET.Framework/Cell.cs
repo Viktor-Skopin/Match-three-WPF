@@ -31,7 +31,9 @@ namespace Match_three_NET.Framework
         /// Помечена ли ячейка на удаление
         /// </summary>
         public bool IsMarkedForDeletion { get; set; }
-
+        /// <summary>
+        /// Изменена ли ячейка
+        /// </summary>
         public bool IsChanged { get; set; }
 
         /// <summary>
