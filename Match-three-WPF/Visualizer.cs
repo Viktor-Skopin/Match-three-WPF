@@ -1,8 +1,5 @@
 ﻿using Match_three_NET.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -35,11 +32,14 @@ namespace Match_three_WPF
         /// Изображение, которое анимируется в данный момент
         /// </summary>
         private MTImage AnimatedImage;
-
+        /// <summary>
+        /// Графический элемент, отображающий кол-во очков
+        /// </summary>
         private Label Points;
-
+        /// <summary>
+        /// Происходит ли анимация в данный момент
+        /// </summary>
         private bool IsAnimationGoing = false;
-
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -62,12 +62,12 @@ namespace Match_three_WPF
                     {
                         X = x,
                         Y = y,
-                        figure = GameField.cells[x, y].figure                     
+                        figure = GameField.cells[x, y].figure
                     };
                     Buttons[x, y] = new Button()
                     {
                         Background = Brushes.Transparent
-                        
+
                     };
                     Buttons[x, y].Content = Images[x, y];
                     Buttons[x, y].Click += CellClick;
@@ -77,12 +77,13 @@ namespace Match_three_WPF
             DefineAllImages();
             PrepareGrid();
         }
-
+        /// <summary>
+        /// Обновление счётчика очков
+        /// </summary>
         private void UpdatePointsLabel()
         {
             Points.Content = GameField.Points;
         }
-
         /// <summary>
         /// Присвоение всем ячейкам соответствующего изображения
         /// </summary>
@@ -96,7 +97,6 @@ namespace Match_three_WPF
                 }
             }
         }
-
         /// <summary>
         /// Присвоение ячейки соответствующего изображения
         /// </summary>
@@ -126,7 +126,6 @@ namespace Match_three_WPF
 
             GameField.cells[X, Y].IsChanged = false;
         }
-
         /// <summary>
         /// Возвращает относительный путь к изображению соответствующей фигурки
         /// </summary>
@@ -152,7 +151,6 @@ namespace Match_three_WPF
                     throw new Exception("Ссылка на объект не может быть получена");
             }
         }
-
         /// <summary>
         /// Подготовка графического игрового поля для дальнейшей работы с ним
         /// </summary>
@@ -177,7 +175,9 @@ namespace Match_three_WPF
                 }
             }
         }
-
+        /// <summary>
+        /// Первый клик по ячейке
+        /// </summary>
         private void FirstClick(int X, int Y)
         {
             //Логика
@@ -188,7 +188,9 @@ namespace Match_three_WPF
             StartImageAnimation(Images[X, Y], Animations.Selection);
             AnimatedImage = Images[X, Y];
         }
-
+        /// <summary>
+        /// Второй клик по ячейке
+        /// </summary>
         private async Task SecondClick(int X, int Y)
         {
             //Снятие выделения
@@ -218,7 +220,7 @@ namespace Match_three_WPF
             GameField.DeleteMarkedCells();
             UpdatePointsLabel();
             await PutDownFigures();
-            
+
             do
             {
                 GameField.MakeNewFigures();
@@ -228,8 +230,8 @@ namespace Match_three_WPF
                 GameField.DeleteMarkedCells();
                 UpdatePointsLabel();
                 await PutDownFigures();
-                
-            } 
+
+            }
             while (GameField.HaveEmptyFigeres());
 
             await DefineAllImagesAnim();
@@ -237,7 +239,9 @@ namespace Match_three_WPF
             UpdatePointsLabel();
             AnimatedImage = null;
         }
-
+        /// <summary>
+        /// Анимированно опустить фигуры вниз
+        /// </summary>
         private async Task PutDownFigures()
         {
             for (int i = 1; i < GameField.fieldSize; i++)
@@ -246,11 +250,13 @@ namespace Match_three_WPF
                 {
                     await DefineAllImagesAnim();
                     GameField.PutDownFiguresOnes();
-                }               
-               
+                }
+
             }
         }
-
+        /// <summary>
+        /// Второе нажатие на ту же кнопку
+        /// </summary>
         private void SameClick()
         {
             GameField.UnselectCell();
@@ -259,7 +265,6 @@ namespace Match_three_WPF
             StopImageAnimation(AnimatedImage);
             AnimatedImage = null;
         }
-
         /// <summary>
         /// Нажатие на графическую ячейку
         /// </summary>
@@ -307,7 +312,6 @@ namespace Match_three_WPF
         {
             image.BeginAnimation(UIElement.OpacityProperty, doubleAnimation);
         }
-
         /// <summary>
         /// Завершает анимацию выбранной ячейки
         /// </summary>
@@ -316,7 +320,6 @@ namespace Match_three_WPF
         {
             image.BeginAnimation(UIElement.OpacityProperty, null);
         }
-
         /// <summary>
         /// Плавно меняет два изображение местами
         /// </summary>
@@ -376,7 +379,7 @@ namespace Match_three_WPF
 
                 StopImageAnimation(image);
 
-                
+
 
                 GameField.cells[X, Y].IsChanged = false;
             }

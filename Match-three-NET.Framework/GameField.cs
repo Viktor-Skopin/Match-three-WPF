@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Match_three_NET.Framework
 {
@@ -19,19 +15,18 @@ namespace Match_three_NET.Framework
         /// Размер поля
         /// </summary>
         public int fieldSize;
-
         /// <summary>
         /// Выбрана ли какая либо ячейка
         /// </summary>
         public bool IsSomeSelected = false;
-
         /// <summary>
         /// Ссылка на выбранную ячейку в массиве
         /// </summary>
         private Cell ChosenCell;
-
+        /// <summary>
+        /// Кол-во очков
+        /// </summary>
         public int Points { get; set; }
-
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -41,7 +36,6 @@ namespace Match_three_NET.Framework
             cells = new Cell[size, size];
             fieldSize = size;
             Points = 0;
-
             for (int x = 0; x < size; x++)
             {
                 for (int y = 0; y < size; y++)
@@ -49,28 +43,24 @@ namespace Match_three_NET.Framework
                     cells[x, y] = new Cell(x, y);
                 }
             }
-
             StartNewGame();
-            Points = 0;
         }
-
         /// <summary>
         /// Начало новой игры
         /// </summary>
-        public void StartNewGame()
+        private void StartNewGame()
         {
             DefineFigures();
             CheckAllCells();
             DeleteMarkedCells();
             PutDownFigures();
             FillVoids();
+            Points = 0;
         }
-
         /// <summary>
         /// Возвращает случайную фигурку
         /// </summary>
         /// <param name="random">Random который должен быть инициализирован вне цикла</param>
-        /// <returns></returns>
         private Figure GetRandomFigure(Random random)
         {
             Array values = Enum.GetValues(typeof(Figure));
@@ -78,7 +68,6 @@ namespace Match_three_NET.Framework
             Figure randomFigure = (Figure)values.GetValue(random.Next(1, values.Length));
             return randomFigure;
         }
-
         /// <summary>
         /// Присвоение всем ячейкам случайной фигурки
         /// </summary>
@@ -94,7 +83,6 @@ namespace Match_three_NET.Framework
                 }
             }
         }
-
         /// <summary>
         /// Выделение ячейки по ссылке
         /// </summary>
@@ -105,7 +93,6 @@ namespace Match_three_NET.Framework
             IsSomeSelected = true;
             ChosenCell = cell;
         }
-
         /// <summary>
         /// Выделение ячейки по указанным координатам
         /// </summary>
@@ -113,7 +100,6 @@ namespace Match_three_NET.Framework
         {
             SelectCell(cells[x, y]);
         }
-
         /// <summary>
         /// Снятие выделения с выбранной в данный момент ячейки
         /// </summary>
@@ -123,7 +109,6 @@ namespace Match_three_NET.Framework
             IsSomeSelected = false;
             ChosenCell = null;
         }
-
         /// <summary>
         /// Обмен фигурами двуг ячеек
         /// </summary>
@@ -150,12 +135,11 @@ namespace Match_three_NET.Framework
                 }
             }
         }
-
         /// <summary>
         /// Проверка совпадений ячеек внизу
         /// </summary>
         /// <param name="cell">Проверяевая ячейка</param>
-        public void MatchCheckDown(Cell cell)
+        private void MatchCheckDown(Cell cell)
         {
             int X = cell.X;
             int Y = cell.Y;
@@ -192,7 +176,7 @@ namespace Match_three_NET.Framework
         /// Проверка совпадений ячеек справа
         /// </summary>
         /// <param name="cell">Проверяевая ячейка</param>
-        public void MatchCheckRight(Cell cell)
+        private void MatchCheckRight(Cell cell)
         {
             int X = cell.X;
             int Y = cell.Y;
@@ -243,7 +227,7 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Очищает ячейку если она помечена на удаление
         /// </summary>
-        public void DeleteCell(Cell cell)
+        private void DeleteCell(Cell cell)
         {
             if (cell.IsMarkedForDeletion)
             {
@@ -256,7 +240,7 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Поднимает пустые ячейки вверх
         /// </summary>
-        public void PutDownFigures()
+        private void PutDownFigures()
         {
             for (int i = 1; i < fieldSize; i++)
             {
@@ -275,7 +259,9 @@ namespace Match_three_NET.Framework
                 }
             }
         }
-
+        /// <summary>
+        /// Опустить фигуры вниз один раз
+        /// </summary>
         public void PutDownFiguresOnes()
         {
             for (int x = 0; x < fieldSize; x++)
@@ -335,7 +321,7 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Заполняет и опускает ячейки пока не останется совпадений
         /// </summary>
-        public void FillVoids()
+        private void FillVoids()
         {           
             while (HaveEmptyFigeres())
             {
@@ -430,7 +416,9 @@ namespace Match_three_NET.Framework
 
             return true;
         }
-
+        /// <summary>
+        /// Есть ли ячейки, помеченные как изменённые
+        /// </summary>
         public bool HasChangedCells()
         {
             for (int x = 0; x < fieldSize; x++)
