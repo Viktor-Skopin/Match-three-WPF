@@ -36,6 +36,8 @@ namespace Match_three_WPF
         /// Графический элемент, отображающий кол-во очков
         /// </summary>
         private Label Points;
+
+        private Label PointsCounter;
         /// <summary>
         /// Происходит ли анимация в данный момент
         /// </summary>
@@ -45,11 +47,12 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="FieldGrid">Игровое поле</param>
         /// <param name="size">Размер игрового поля</param>
-        public Visualizer(Grid FieldGrid, int size, Label label)
+        public Visualizer(Grid FieldGrid, int size, Label pointsLabel, Label pointsCounterLabel)
         {
             GameFieldControl = FieldGrid;
             GameField = new GameField(size);
-            Points = label;
+            Points = pointsLabel;
+            PointsCounter = pointsCounterLabel;
 
             Images = new MTImage[size, size];
             Buttons = new Button[size, size];
@@ -83,6 +86,8 @@ namespace Match_three_WPF
         private void UpdatePointsLabel()
         {
             Points.Content = GameField.Points;
+            PointsCounter.Content = $"(+{GameField.PointAdded})";
+            
         }
         /// <summary>
         /// Присвоение всем ячейкам соответствующего изображения
@@ -193,6 +198,9 @@ namespace Match_three_WPF
         /// </summary>
         private async Task SecondClick(int X, int Y)
         {
+            UpdatePointsLabel();
+            GameField.ResetCounter();
+
             //Снятие выделения
             StopImageAnimation(AnimatedImage);
             GameField.IsSomeSelected = false;
@@ -237,6 +245,8 @@ namespace Match_three_WPF
             await DefineAllImagesAnim();
 
             UpdatePointsLabel();
+            GameField.ResetCounter();
+
             AnimatedImage = null;
         }
         /// <summary>

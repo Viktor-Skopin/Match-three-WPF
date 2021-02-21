@@ -24,10 +24,14 @@ namespace Match_three_WPF
         {
             InitializeComponent();
 
-            MatchThree = new Visualizer(GameFieldGrid, 10, PointsLabel);
-            GameTimer timer = new GameTimer(500, TimeLabel, TimePB);
+            MatchThree = new Visualizer(GameFieldGrid, 10, PointsLabel, AddedLabel);
+            GameTimer timer = new GameTimer(65, TimeLabel, TimePB);
             timer.Start();
+        }
 
+        private void Exit(object sender, RoutedEventArgs e)
+        {
+            Close();
         }
     }
 }

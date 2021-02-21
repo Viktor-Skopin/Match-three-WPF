@@ -27,6 +27,8 @@ namespace Match_three_NET.Framework
         /// Кол-во очков
         /// </summary>
         public int Points { get; set; }
+
+        public int PointAdded { get; set; }
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -56,6 +58,7 @@ namespace Match_three_NET.Framework
             PutDownFigures();
             FillVoids();
             Points = 0;
+            PointAdded = 0;
         }
         /// <summary>
         /// Возвращает случайную фигурку
@@ -230,11 +233,39 @@ namespace Match_three_NET.Framework
         private void DeleteCell(Cell cell)
         {
             if (cell.IsMarkedForDeletion)
-            {
-                cell.figure = Figure.Empty;
+            {               
                 cell.IsMarkedForDeletion = false;
-                Points += 1;
+                Points += DefineCellPoints(cell);
+                PointAdded += DefineCellPoints(cell);
+                cell.figure = Figure.Empty;
             }
+        }
+
+        private int DefineCellPoints(Cell cell)
+        {
+            switch (cell.figure)
+            {
+                case Figure.Empty:
+                    return 0;
+                case Figure.Amethyst:
+                    return 15;
+                case Figure.Citrine:
+                    return 5;
+                case Figure.Diamond:
+                    return 30;
+                case Figure.Emerald:
+                    return 10;
+                case Figure.Ruby:
+                    return 25;
+                case Figure.Topaz:
+                    return 20;
+                default:
+                    return 0;
+            }
+        }
+        public void ResetCounter()
+        {
+            PointAdded = 0;
         }
 
         /// <summary>
@@ -394,7 +425,6 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Есть ли комбинации фигур после хода
         /// </summary>
-        /// <returns></returns>
         public bool IsFalseMove()
         {
             for (int x = 0; x < fieldSize; x++)
