@@ -27,7 +27,7 @@ namespace Match_three_WPF
         /// <summary>
         /// Логической егровое поле
         /// </summary>
-        private GameField GameField;
+        public GameField GameField;
         /// <summary>
         /// Изображение, которое анимируется в данный момент
         /// </summary>
@@ -42,6 +42,10 @@ namespace Match_three_WPF
         /// Происходит ли анимация в данный момент
         /// </summary>
         private bool IsAnimationGoing = false;
+
+        public ButtonsController BC;
+
+        public Spells ChosenSpell;
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -53,9 +57,12 @@ namespace Match_three_WPF
             GameField = new GameField(size);
             Points = pointsLabel;
             PointsCounter = pointsCounterLabel;
+            ChosenSpell = Spells.None;
 
             Images = new MTImage[size, size];
             Buttons = new Button[size, size];
+
+            BC = new ButtonsController();
 
             for (int x = 0; x < size; x++)
             {
@@ -247,6 +254,8 @@ namespace Match_three_WPF
             UpdatePointsLabel();
             GameField.ResetCounter();
 
+            BC.UpdateStatus(GameField);
+
             AnimatedImage = null;
         }
         /// <summary>
@@ -290,6 +299,43 @@ namespace Match_three_WPF
             int y = Grid.GetRow(sender as Button);
 
             IsAnimationGoing = true;
+
+            switch (ChosenSpell)
+            {
+                case Spells.HorizontalSlash:
+                    await HorizontalSlash(y);
+                    IsAnimationGoing = false;
+                    ChosenSpell = Spells.None;
+                    BC.UpdateStatus(GameField);
+                    return;
+                case Spells.VerticalSlash:
+                    await VerticalSlash(x);
+                    IsAnimationGoing = false;
+                    ChosenSpell = Spells.None;
+                    BC.UpdateStatus(GameField);
+                    return;                    
+                case Spells.Bomb:
+                    await Bomb(GameField.cells[x, y]);
+                    IsAnimationGoing = false;
+                    ChosenSpell = Spells.None;
+                    BC.UpdateStatus(GameField);
+                    return;
+                case Spells.Diamondization:
+                    await Diamondization(GameField.cells[x, y]);
+                    IsAnimationGoing = false;
+                    ChosenSpell = Spells.None;
+                    BC.UpdateStatus(GameField);
+                    return;
+                case Spells.Pick:
+                    await Pick(GameField.cells[x, y]);
+                    IsAnimationGoing = false;
+                    ChosenSpell = Spells.None;
+                    BC.UpdateStatus(GameField);
+                    return;
+                case Spells.None:
+                    IsAnimationGoing = false;
+                    break;
+            }            
 
             //Первое нажатие
             if (GameField.IsSomeSelected == false)
@@ -335,7 +381,6 @@ namespace Match_three_WPF
         /// </summary>
         /// <param name="firstImage">Первое изображение</param>
         /// <param name="secondImage">Второе изображение</param>
-        /// <returns></returns>
         private async Task SwapImages(MTImage firstImage, MTImage secondImage)
         {
             StartImageAnimation(firstImage, Animations.Disappearance);
@@ -368,7 +413,7 @@ namespace Match_three_WPF
                     AnimatedDefineImage(Images[x, y]);
                 }
             }
-            await Task.Delay(450);
+            await Task.Delay(500);
         }
         /// <summary>
         /// Анимированно меняет язображение на актуальное
@@ -415,6 +460,143 @@ namespace Match_three_WPF
             {
 
             }
+        }
+
+        private async Task MakeNewFigures()
+        {
+            GameField.MakeNewFigures();
+            await DefineAllImagesAnim();
+        }
+
+        private async Task DeleteFigures()
+        {
+            GameField.CheckAllCells();
+            GameField.DeleteMarkedCells();
+            UpdatePointsLabel();
+            await PutDownFigures();
+        }
+
+        private async Task UpdateField()
+        {
+            do
+            {
+                await MakeNewFigures();
+                await DeleteFigures();
+            }
+            while (GameField.HaveEmptyFigeres());
+
+        }
+
+        public async Task HorizontalSlash(int y)
+        {            
+            GameField.HorisontalSlash(y);
+
+            UpdatePointsLabel();
+
+            await PutDownFigures();
+
+            await UpdateField();
+
+            await DefineAllImagesAnim();
+
+            UpdatePointsLabel();
+
+            GameField.ResetCounter();
+        }
+
+        public async Task VerticalSlash(int x)
+        {
+            GameField.VerticalSlash(x);
+
+            UpdatePointsLabel();
+
+            await PutDownFigures();
+
+            await UpdateField();
+
+            await DefineAllImagesAnim();
+
+            UpdatePointsLabel();
+
+            GameField.ResetCounter();
+        }
+        public async Task Diamondization(Cell cell)
+        {
+            GameField.Diamondization(cell);
+
+            UpdatePointsLabel();
+
+            await PutDownFigures();
+
+            await UpdateField();
+
+            await DefineAllImagesAnim();
+
+            UpdatePointsLabel();
+
+            GameField.ResetCounter();
+        }
+
+        public async Task Pick(Cell cell)
+        {
+            GameField.Pick(cell);
+
+            UpdatePointsLabel();
+
+            await PutDownFigures();
+
+            await UpdateField();
+
+            await DefineAllImagesAnim();
+
+            UpdatePointsLabel();
+
+            GameField.ResetCounter();
+        }
+
+        public async Task Mix()
+        {
+            if (IsAnimationGoing)
+            {
+                return;
+            }
+
+            IsAnimationGoing = true;
+
+            GameField.Mix();
+
+            UpdatePointsLabel();
+
+            await PutDownFigures();
+
+            await UpdateField();
+
+            await DefineAllImagesAnim();
+
+            UpdatePointsLabel();
+
+            GameField.ResetCounter();
+
+            IsAnimationGoing = false;
+
+            BC.UpdateStatus(GameField);
+        }
+
+        public async Task Bomb(Cell cell)
+        {
+            GameField.Bomb(cell);
+
+            UpdatePointsLabel();
+
+            await PutDownFigures();
+
+            await UpdateField();
+
+            await DefineAllImagesAnim();
+
+            UpdatePointsLabel();
+
+            GameField.ResetCounter();
         }
     }
 }

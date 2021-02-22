@@ -59,11 +59,13 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="Animations.cs" />
+    <Compile Include="ButtonsController.cs" />
     <Compile Include="GameTimer.cs" />
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="MTImage.cs" />
+    <Compile Include="Spells.cs" />
     <Compile Include="Visualizer.cs" />
     <Page Include="GameWindow.xaml">
       <SubType>Designer</SubType>

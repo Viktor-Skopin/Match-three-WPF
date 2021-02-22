@@ -127,7 +127,8 @@
                     Grid.Column="0"
                     Grid.Row="1"
                     Margin="2"                        
-                        Background="Transparent">
+                        Background="Transparent"
+                        x:Name="BombSpellButton" Click="BombSpellButton_Click">
                         <Image Source="/Assets/Interface/1.png" Stretch="Uniform"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
@@ -135,7 +136,8 @@
                     Grid.Column="1"
                     Grid.Row="1"
                     Margin="2"
-                        Background="Transparent">
+                        Background="Transparent"
+                        x:Name="DiamondizationSpellButton" Click="DiamondizationSpellButton_Click">
                         <Image Source="/Assets/Interface/2.png" Stretch="Uniform"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
@@ -143,7 +145,8 @@
                     Grid.Column="2"
                     Grid.Row="1"
                     Margin="2"
-                        Background="Transparent">
+                        Background="Transparent"
+                        x:Name="PickSpellButton" Click="PickSpellButton_Click">
                         <Image Source="/Assets/Interface/3.png" Stretch="Uniform"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
@@ -151,7 +154,8 @@
                     Grid.Column="0"
                     Grid.Row="2"
                     Margin="2"
-                        Background="Transparent">
+                        Background="Transparent"
+                        x:Name="HorizontalSlashSpellButton" Click="HorizontalSlashSpellButton_Click">
                         <Image Source="/Assets/Interface/4.png" Stretch="Uniform"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
@@ -159,7 +163,8 @@
                     Grid.Column="1"
                     Grid.Row="2"
                     Margin="2"
-                        Background="Transparent">
+                        Background="Transparent"
+                        x:Name="VerticalSlashSpellButton" Click="VerticalSlashSpellButton_Click">
                         <Image Source="/Assets/Interface/5.png" Stretch="Uniform"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>
@@ -167,7 +172,8 @@
                     Grid.Column="2"
                     Grid.Row="2"
                     Margin="2"
-                        Background="Transparent">
+                        Background="Transparent"
+                        x:Name="MixSpellButton" Click="MixSpellButton_Click">
                         <Image Source="/Assets/Interface/6.png" Stretch="Uniform"
                                VerticalAlignment="Center" HorizontalAlignment="Center"/>
                     </Button>

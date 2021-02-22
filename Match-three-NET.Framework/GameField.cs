@@ -29,6 +29,16 @@ namespace Match_three_NET.Framework
         public int Points { get; set; }
 
         public int PointAdded { get; set; }
+
+        public bool IsBombAviable { get; set; }
+        public bool IsMixAviable { get; set; }
+        public bool IsHorizontalSlashAviable { get; set; }
+        public bool IsVerticalSlashAviable { get; set; }
+        public bool IsPickAviable { get; set; }
+        public bool IsDiamondizationAviable { get; set; }
+
+
+
         /// <summary>
         /// Конструктор
         /// </summary>
@@ -57,8 +67,16 @@ namespace Match_three_NET.Framework
             DeleteMarkedCells();
             PutDownFigures();
             FillVoids();
+
             Points = 0;
             PointAdded = 0;
+
+            IsMixAviable = false;
+            IsBombAviable = false;
+            IsDiamondizationAviable = false;
+            IsHorizontalSlashAviable = false;
+            IsVerticalSlashAviable = false;
+            IsPickAviable = false;
         }
         /// <summary>
         /// Возвращает случайную фигурку
@@ -174,6 +192,13 @@ namespace Match_three_NET.Framework
                     cells[X, j].IsChanged = true;
                 }
             }
+
+            Random random = new Random();
+
+            if(IsSpellUnloced(random, count))
+            {
+                UnlockRandomSpell(random);
+            }
         }
         /// <summary>
         /// Проверка совпадений ячеек справа
@@ -218,12 +243,17 @@ namespace Match_three_NET.Framework
         /// </summary>
         public void DeleteMarkedCells()
         {
-            for (int x = 0; x < fieldSize; x++)
+            //for (int x = 0; x < fieldSize; x++)
+            //{
+            //    for (int y = 0; y < fieldSize; y++)
+            //    {
+            //        DeleteCell(cells[x, y]);
+            //    }
+            //}
+
+            foreach(Cell cell in cells)
             {
-                for (int y = 0; y < fieldSize; y++)
-                {
-                    DeleteCell(cells[x, y]);
-                }
+                DeleteCell(cell);
             }
         }
 
@@ -233,7 +263,7 @@ namespace Match_three_NET.Framework
         private void DeleteCell(Cell cell)
         {
             if (cell.IsMarkedForDeletion)
-            {               
+            {
                 cell.IsMarkedForDeletion = false;
                 Points += DefineCellPoints(cell);
                 PointAdded += DefineCellPoints(cell);
@@ -353,7 +383,7 @@ namespace Match_three_NET.Framework
         /// Заполняет и опускает ячейки пока не останется совпадений
         /// </summary>
         private void FillVoids()
-        {           
+        {
             while (HaveEmptyFigeres())
             {
                 MakeNewFigures();
@@ -462,6 +492,175 @@ namespace Match_three_NET.Framework
                 }
             }
             return false;
+        }
+
+        public void HorisontalSlash(int y)
+        {
+            for (int i = 0; i < fieldSize; i++)
+            {
+                cells[i, y].IsMarkedForDeletion = true;
+                cells[i, y].IsChanged = true;
+            }
+
+            DeleteMarkedCells();
+
+            IsHorizontalSlashAviable = false;
+        }
+
+        public void VerticalSlash(int x)
+        {
+            for (int i = 0; i < fieldSize; i++)
+            {
+                cells[x, i].IsMarkedForDeletion = true;
+                cells[x, i].IsChanged = true;
+            }
+
+            DeleteMarkedCells();
+
+            IsVerticalSlashAviable = false;
+        }
+
+        public void Diamondization(Cell cell)
+        {
+            Figure figure = cell.figure;
+
+            foreach (Cell element in cells)
+            {
+                if (element.figure == figure)
+                {
+                    element.figure = Figure.Diamond;
+                    element.IsChanged = true;
+                }
+            }
+
+            IsDiamondizationAviable = false;
+        }
+
+        public void Pick(Cell cell)
+        {
+            cell.IsMarkedForDeletion = true;
+            cell.IsChanged = true;
+            DeleteCell(cell);
+
+            IsPickAviable = false;
+        }
+
+        public void Mix()
+        {
+            Random random = new Random();
+
+            foreach (Cell cell in cells)
+            {
+                cell.figure = GetRandomFigure(random);
+                cell.IsChanged = true;
+            }
+
+            IsMixAviable = false;
+        }
+
+        public void Bomb(Cell cell)
+        {
+            int x = cell.X;
+            int y = cell.Y;
+
+            cell.IsMarkedForDeletion = true;
+            cell.IsChanged = true;
+            DeleteCell(cell);
+
+            if (y + 1 < fieldSize)//Низ
+            {
+                cells[x, y + 1].IsMarkedForDeletion = true;
+                cells[x, y + 1].IsChanged = true;
+                DeleteCell(cells[x, y + 1]);
+            }
+            if (y - 1 >= 0)//Верх
+            {
+                cells[x, y - 1].IsMarkedForDeletion = true;
+                cells[x, y - 1].IsChanged = true;
+                DeleteCell(cells[x, y - 1]);
+            }
+            if (x + 1 < fieldSize)//Право
+            {
+                cells[x + 1, y].IsMarkedForDeletion = true;
+                cells[x + 1, y].IsChanged = true;
+                DeleteCell(cells[x + 1, y]);
+            }
+            if (x - 1 >= 0)//Лево
+            {
+                cells[x - 1, y].IsMarkedForDeletion = true;
+                cells[x - 1, y].IsChanged = true;
+                DeleteCell(cells[x - 1, y]);
+            }
+            if (y + 1 < fieldSize && x - 1 >= 0)//Низ - Лево
+            {
+                cells[x - 1, y + 1].IsMarkedForDeletion = true;
+                cells[x - 1, y + 1].IsChanged = true;
+                DeleteCell(cells[x - 1, y + 1]);
+            }
+            if (y + 1 < fieldSize && x + 1 < fieldSize)//Низ - Право
+            {
+                cells[x + 1, y + 1].IsMarkedForDeletion = true;
+                cells[x + 1, y + 1].IsChanged = true;
+                DeleteCell(cells[x + 1, y + 1]);
+            }
+            if (y - 1 >= 0 && x - 1 >= 0)//Верх - Лево
+            {
+                cells[x - 1, y - 1].IsMarkedForDeletion = true;
+                cells[x - 1, y - 1].IsChanged = true;
+                DeleteCell(cells[x - 1, y - 1]);
+            }
+            if (y - 1 >= 0 && x + 1 < fieldSize)//Верх - Право
+            {
+                cells[x + 1, y - 1].IsMarkedForDeletion = true;
+                cells[x + 1, y - 1].IsChanged = true;
+                DeleteCell(cells[x + 1, y - 1]);
+            }
+
+            IsBombAviable = false;
+        }
+
+        public void UnlockRandomSpell(Random random)
+        {
+            int number = random.Next(1, 100);
+
+            if(number >=1 && number <= 30)
+            {
+                IsPickAviable = true;
+            }
+            else if (number >= 31 && number <= 50)
+            {
+                IsMixAviable = true;
+            }
+            else if (number >= 51 && number <= 65)
+            {
+                IsHorizontalSlashAviable = true;
+            }
+            else if (number >=66 && number <= 80)
+            {
+                IsVerticalSlashAviable = true;
+            }
+            else if (number >= 81 && number <= 95)
+            {
+                IsBombAviable = true;
+            }
+            else if (number >= 96 && number <= 100)
+            {
+                IsDiamondizationAviable = true;
+            }
+        }
+
+        public bool IsSpellUnloced(Random random, int figureCount)
+        {
+            int number = random.Next(1, 100);
+
+            if(figureCount * 10 > number)
+            {
+                return true;
+            }
+            else
+            {
+                return false;
+            }
         }
     }
 }
