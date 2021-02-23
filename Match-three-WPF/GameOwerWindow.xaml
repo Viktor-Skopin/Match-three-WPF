@@ -4,8 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Match_three_WPF"
-        mc:Ignorable="d"
-        Title="GameOwerWindow" Height="250" Width="300" WindowStyle="ToolWindow" ResizeMode="NoResize">
+        mc:Ignorable="d" Height="250" Width="300" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
@@ -17,7 +16,7 @@
 
             <TextBlock Text="Вы заработали" Grid.Row="0" FontSize="30" HorizontalAlignment="Center"/>
             <TextBlock x:Name="PointsLabel" Text="000 очков" Grid.Row="1" FontSize="30" HorizontalAlignment="Center"/>
-            <TextBox Grid.Row="2" Height="40" Margin="5" x:Name="NameTextBox" Text="Имя" FontSize="25"/>
+            <TextBox Grid.Row="2" Height="40" Margin="5" x:Name="NameTextBox" FontSize="25" BorderBrush="Black"/>
             <Button x:Name="PushButton" Height="40" Grid.Row="3" Margin="5" Click="PushButton_Click">
                 <TextBlock Text="Сохранить" FontSize="25"/>
             </Button>
