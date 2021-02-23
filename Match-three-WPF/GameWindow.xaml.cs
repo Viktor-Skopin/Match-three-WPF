@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using System;
+using System.Windows;
 
 namespace Match_three_WPF
 {
@@ -8,22 +9,26 @@ namespace Match_three_WPF
     public partial class GameWindow : Window
     {
         Visualizer MatchThree;
+        GameTimer timer;
         public GameWindow()
         {
             InitializeComponent();
 
             MatchThree = new Visualizer(GameFieldGrid, 10, PointsLabel, AddedLabel);
 
-            MatchThree.BC.Mix = MixSpellButton;
-            MatchThree.BC.Pick = PickSpellButton;
-            MatchThree.BC.HorizontalSlash = HorizontalSlashSpellButton;
-            MatchThree.BC.VerticalSlash = VerticalSlashSpellButton;
-            MatchThree.BC.Bomb = BombSpellButton;
-            MatchThree.BC.Diamondization = DiamondizationSpellButton;
+            MatchThree.ButtonController.Mix = MixSpellButton;
+            MatchThree.ButtonController.Pick = PickSpellButton;
+            MatchThree.ButtonController.HorizontalSlash = HorizontalSlashSpellButton;
+            MatchThree.ButtonController.VerticalSlash = VerticalSlashSpellButton;
+            MatchThree.ButtonController.Bomb = BombSpellButton;
+            MatchThree.ButtonController.Diamondization = DiamondizationSpellButton;
 
-            MatchThree.BC.UpdateStatus(MatchThree.GameField);
+            MatchThree.ButtonController.UpdateStatus(MatchThree.GameField);
 
-            GameTimer timer = new GameTimer(300, TimeLabel, TimePB);
+            MatchThree.Leaderboard.SetConrols(LeaderLabel, LeaderProgress, LeaderPointsLabel, PercentLabel);
+
+            timer = new GameTimer(300, TimeLabel, TimePB);
+            timer.DispatcherTimer.Tick += TimerTick;
             timer.Start();
         }
 
@@ -128,6 +133,70 @@ namespace Match_three_WPF
                 DisableAllSpells();
                 BombSpellButton.Margin = new Thickness(5, 5, 5, 5);
             }
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            LeaderboardWindow LW = new LeaderboardWindow(MatchThree.Leaderboard.board.Players);
+            LW.ShowDialog();
+        }
+
+        private void TimerTick(object sender, EventArgs e)
+        {
+            if (timer.timeSeconds > 0)
+            {
+                timer.timeSeconds--;
+
+                timer.PB.Value = timer.timeSeconds;
+
+                timer.timeSpan = TimeSpan.FromSeconds(timer.timeSeconds);
+
+                timer.GameLabel.Content = timer.timeSpan.ToString("mm' : 'ss");
+            }
+            else
+            {
+                timer.Stop();
+                GameOwerWindow GW = new GameOwerWindow(MatchThree.GameField.Points);
+                GW.ShowDialog();
+
+                MatchThree.NewGame();
+
+                MatchThree.ButtonController.Mix = MixSpellButton;
+                MatchThree.ButtonController.Pick = PickSpellButton;
+                MatchThree.ButtonController.HorizontalSlash = HorizontalSlashSpellButton;
+                MatchThree.ButtonController.VerticalSlash = VerticalSlashSpellButton;
+                MatchThree.ButtonController.Bomb = BombSpellButton;
+                MatchThree.ButtonController.Diamondization = DiamondizationSpellButton;
+
+                MatchThree.ButtonController.UpdateStatus(MatchThree.GameField);
+
+                MatchThree.Leaderboard.SetConrols(LeaderLabel, LeaderProgress, LeaderPointsLabel, PercentLabel);
+
+                timer = new GameTimer(300, TimeLabel, TimePB);
+                timer.DispatcherTimer.Tick += TimerTick;
+                timer.Start();
+            }
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            MatchThree.NewGame();
+
+            MatchThree.ButtonController.Mix = MixSpellButton;
+            MatchThree.ButtonController.Pick = PickSpellButton;
+            MatchThree.ButtonController.HorizontalSlash = HorizontalSlashSpellButton;
+            MatchThree.ButtonController.VerticalSlash = VerticalSlashSpellButton;
+            MatchThree.ButtonController.Bomb = BombSpellButton;
+            MatchThree.ButtonController.Diamondization = DiamondizationSpellButton;
+
+            MatchThree.ButtonController.UpdateStatus(MatchThree.GameField);
+
+            MatchThree.Leaderboard.SetConrols(LeaderLabel, LeaderProgress, LeaderPointsLabel, PercentLabel);
+
+            timer = new GameTimer(300, TimeLabel, TimePB);
+            timer.DispatcherTimer.Tick += TimerTick;
+            timer.Start();
         }
     }
 }

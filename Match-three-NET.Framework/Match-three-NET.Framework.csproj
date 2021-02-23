@@ -44,7 +44,14 @@
     <Compile Include="Cell.cs" />
     <Compile Include="Figure.cs" />
     <Compile Include="GameField.cs" />
+    <Compile Include="Leaderboard.cs" />
+    <Compile Include="PlayerAccount.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Leaderboard.xml">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

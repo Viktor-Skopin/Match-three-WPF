@@ -60,7 +60,7 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Начало новой игры
         /// </summary>
-        private void StartNewGame()
+        public void StartNewGame()
         {
             DefineFigures();
             CheckAllCells();

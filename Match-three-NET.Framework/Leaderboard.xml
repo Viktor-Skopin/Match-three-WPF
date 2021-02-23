@@ -1,0 +1,43 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ArrayOfPlayerAccount>
+	<PlayerAccount>
+		<Name>Перый</Name>
+		<Points>3500</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Второй</Name>
+		<Points>2500</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Третий</Name>
+		<Points>2000</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Четвёртый</Name>
+		<Points>1500</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Пятый</Name>
+		<Points>1000</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Шестой</Name>
+		<Points>700</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Седьмой</Name>
+		<Points>500</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Восьмой</Name>
+		<Points>300</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Девятый</Name>
+		<Points>200</Points>
+	</PlayerAccount>
+	<PlayerAccount>
+		<Name>Десятый</Name>
+		<Points>100</Points>
+	</PlayerAccount>
+</ArrayOfPlayerAccount>

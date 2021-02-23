@@ -43,7 +43,9 @@ namespace Match_three_WPF
         /// </summary>
         private bool IsAnimationGoing = false;
 
-        public ButtonsController BC;
+        public ButtonsController ButtonController;
+
+        public VisualLeaderboard Leaderboard;
 
         public Spells ChosenSpell;
         /// <summary>
@@ -62,7 +64,8 @@ namespace Match_three_WPF
             Images = new MTImage[size, size];
             Buttons = new Button[size, size];
 
-            BC = new ButtonsController();
+            ButtonController = new ButtonsController();
+            Leaderboard = new VisualLeaderboard();
 
             for (int x = 0; x < size; x++)
             {
@@ -205,6 +208,7 @@ namespace Match_three_WPF
         /// </summary>
         private async Task SecondClick(int X, int Y)
         {
+            
             UpdatePointsLabel();
             GameField.ResetCounter();
 
@@ -254,8 +258,8 @@ namespace Match_three_WPF
             UpdatePointsLabel();
             GameField.ResetCounter();
 
-            BC.UpdateStatus(GameField);
-
+            ButtonController.UpdateStatus(GameField);
+            Leaderboard.UpdateInfo(GameField.Points);
             AnimatedImage = null;
         }
         /// <summary>
@@ -306,34 +310,39 @@ namespace Match_three_WPF
                     await HorizontalSlash(y);
                     IsAnimationGoing = false;
                     ChosenSpell = Spells.None;
-                    BC.UpdateStatus(GameField);
+                    ButtonController.UpdateStatus(GameField);
+                    Leaderboard.UpdateInfo(GameField.Points);
                     return;
                 case Spells.VerticalSlash:
                     await VerticalSlash(x);
                     IsAnimationGoing = false;
                     ChosenSpell = Spells.None;
-                    BC.UpdateStatus(GameField);
+                    ButtonController.UpdateStatus(GameField);
+                    Leaderboard.UpdateInfo(GameField.Points);
                     return;                    
                 case Spells.Bomb:
                     await Bomb(GameField.cells[x, y]);
                     IsAnimationGoing = false;
                     ChosenSpell = Spells.None;
-                    BC.UpdateStatus(GameField);
+                    ButtonController.UpdateStatus(GameField);
+                    Leaderboard.UpdateInfo(GameField.Points);
                     return;
                 case Spells.Diamondization:
                     await Diamondization(GameField.cells[x, y]);
                     IsAnimationGoing = false;
                     ChosenSpell = Spells.None;
-                    BC.UpdateStatus(GameField);
+                    ButtonController.UpdateStatus(GameField);
+                    Leaderboard.UpdateInfo(GameField.Points);
                     return;
                 case Spells.Pick:
                     await Pick(GameField.cells[x, y]);
                     IsAnimationGoing = false;
                     ChosenSpell = Spells.None;
-                    BC.UpdateStatus(GameField);
+                    ButtonController.UpdateStatus(GameField);
+                    Leaderboard.UpdateInfo(GameField.Points);
                     return;
                 case Spells.None:
-                    IsAnimationGoing = false;
+                    
                     break;
             }            
 
@@ -579,7 +588,8 @@ namespace Match_three_WPF
 
             IsAnimationGoing = false;
 
-            BC.UpdateStatus(GameField);
+            ButtonController.UpdateStatus(GameField);
+            Leaderboard.UpdateInfo(GameField.Points);
         }
 
         public async Task Bomb(Cell cell)
@@ -597,6 +607,19 @@ namespace Match_three_WPF
             UpdatePointsLabel();
 
             GameField.ResetCounter();
+        }
+
+        public void NewGame()
+        {
+            IsAnimationGoing = false;
+            GameField.StartNewGame();
+            DefineAllImages();
+
+            ButtonController = new ButtonsController();
+
+            UpdatePointsLabel();
+            Leaderboard.board.Deserialize();
+            Leaderboard.UpdateInfo(GameField.Points);
         }
     }
 }

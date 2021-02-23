@@ -60,14 +60,29 @@
     </ApplicationDefinition>
     <Compile Include="Animations.cs" />
     <Compile Include="ButtonsController.cs" />
+    <Compile Include="GameOwerWindow.xaml.cs">
+      <DependentUpon>GameOwerWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="GameTimer.cs" />
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="LeaderboardWindow.xaml.cs">
+      <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="MTImage.cs" />
     <Compile Include="Spells.cs" />
     <Compile Include="Visualizer.cs" />
+    <Compile Include="VisualLeaderboard.cs" />
+    <Page Include="GameOwerWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="LeaderboardWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

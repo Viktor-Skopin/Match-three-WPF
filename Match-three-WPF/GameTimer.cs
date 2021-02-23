@@ -9,25 +9,24 @@ namespace Match_three_WPF
         /// <summary>
         /// Таймер
         /// </summary>
-        private DispatcherTimer DispatcherTimer;
+        public DispatcherTimer DispatcherTimer;
         /// <summary>
         /// Label для вывода оставшегося времени
         /// </summary>
-        private Label GameLabel;
+        public Label GameLabel;
         /// <summary>
         /// Progress Bar для вывода оставшегося времени
         /// </summary>
-        ProgressBar PB;
+        public ProgressBar PB;
         /// <summary>
         /// Оставшееся время
         /// </summary>
-        TimeSpan timeSpan;
-        int timeSeconds;
+        public TimeSpan timeSpan;
+        public int timeSeconds;
 
         public GameTimer(int seconds, Label label, ProgressBar progressBar)
         {
             DispatcherTimer = new DispatcherTimer();
-            DispatcherTimer.Tick += TimerTick;
             DispatcherTimer.Interval = new TimeSpan(0, 0, 1);
 
             GameLabel = label;
@@ -38,24 +37,6 @@ namespace Match_three_WPF
             timeSpan = TimeSpan.FromSeconds(seconds);
             timeSeconds = seconds;
             GameLabel.Content = timeSpan.ToString("mm' : 'ss");
-        }
-
-        private void TimerTick(object sender, EventArgs e)
-        {
-            if(timeSeconds > 0)
-            {
-                timeSeconds--;
-
-                PB.Value = timeSeconds;
-
-                timeSpan = TimeSpan.FromSeconds(timeSeconds);
-
-                GameLabel.Content = timeSpan.ToString("mm' : 'ss");
-            }
-            else
-            {
-                Stop();
-            }
         }
 
         public void Start()

@@ -1,0 +1,26 @@
+﻿<Window x:Class="Match_three_WPF.GameOwerWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:Match_three_WPF"
+        mc:Ignorable="d"
+        Title="GameOwerWindow" Height="250" Width="300" WindowStyle="ToolWindow" ResizeMode="NoResize">
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TextBlock Text="Вы заработали" Grid.Row="0" FontSize="30" HorizontalAlignment="Center"/>
+            <TextBlock x:Name="PointsLabel" Text="000 очков" Grid.Row="1" FontSize="30" HorizontalAlignment="Center"/>
+            <TextBox Grid.Row="2" Height="40" Margin="5" x:Name="NameTextBox" Text="Имя" FontSize="25"/>
+            <Button x:Name="PushButton" Height="40" Grid.Row="3" Margin="5" Click="PushButton_Click">
+                <TextBlock Text="Сохранить" FontSize="25"/>
+            </Button>
+        </Grid>
+    </Grid>
+</Window>
