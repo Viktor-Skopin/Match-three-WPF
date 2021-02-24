@@ -7,6 +7,12 @@
         mc:Ignorable="d" Height="500" Width="270" MinHeight="500" MinWidth="270" WindowStartupLocation="CenterScreen" WindowStyle="ToolWindow">
     <Grid>
         <Grid>
+            <Grid.Background>
+                <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                    <GradientStop Color="#FFA8FDD0" Offset="0"/>
+                    <GradientStop Color="#FFE1FF90" Offset="1"/>
+                </LinearGradientBrush>
+            </Grid.Background>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
                 <RowDefinition/>
@@ -15,6 +21,9 @@
             <TextBlock Text="Таблица лидеров" HorizontalAlignment="Center" FontSize="30" Grid.Row="0"/>
 
             <ListBox x:Name="ScoreList" HorizontalContentAlignment ="Stretch" Grid.Row="1">
+                <ListBox.Background>
+                    <SolidColorBrush Color="White" Opacity="0"/>
+                </ListBox.Background>
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <Grid>

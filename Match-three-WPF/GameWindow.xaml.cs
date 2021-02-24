@@ -137,8 +137,10 @@ namespace Match_three_WPF
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
+            timer.Stop();
             LeaderboardWindow LW = new LeaderboardWindow(MatchThree.Leaderboard.board.Players);
             LW.ShowDialog();
+            timer.Start();
         }
 
         private void TimerTick(object sender, EventArgs e)
@@ -196,6 +198,14 @@ namespace Match_three_WPF
 
             timer = new GameTimer(300, TimeLabel, TimePB);
             timer.DispatcherTimer.Tick += TimerTick;
+            timer.Start();
+        }
+
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            GuideWindow GW = new GuideWindow();
+            GW.ShowDialog();
             timer.Start();
         }
     }

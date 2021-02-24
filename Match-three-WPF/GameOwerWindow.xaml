@@ -6,6 +6,13 @@
         xmlns:local="clr-namespace:Match_three_WPF"
         mc:Ignorable="d" Height="250" Width="300" WindowStyle="ToolWindow" ResizeMode="NoResize" WindowStartupLocation="CenterScreen">
     <Grid>
+        <Grid.Background>
+            <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                <GradientStop Color="#FFA8FDD0" Offset="0"/>
+                <GradientStop Color="#FFE1FF90" Offset="1"/>
+            </LinearGradientBrush>
+        </Grid.Background>
+
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>

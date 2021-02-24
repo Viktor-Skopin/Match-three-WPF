@@ -58,27 +58,34 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Animations.cs" />
-    <Compile Include="ButtonsController.cs" />
+    <Compile Include="Classes\Animations.cs" />
+    <Compile Include="Classes\ButtonsController.cs" />
     <Compile Include="GameOwerWindow.xaml.cs">
       <DependentUpon>GameOwerWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GameTimer.cs" />
+    <Compile Include="Classes\GameTimer.cs" />
     <Compile Include="GameWindow.xaml.cs">
       <DependentUpon>GameWindow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="GuideWindow.xaml.cs">
+      <DependentUpon>GuideWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="LeaderboardWindow.xaml.cs">
       <DependentUpon>LeaderboardWindow.xaml</DependentUpon>
     </Compile>
-    <Compile Include="MTImage.cs" />
-    <Compile Include="Spells.cs" />
-    <Compile Include="Visualizer.cs" />
-    <Compile Include="VisualLeaderboard.cs" />
+    <Compile Include="Classes\MTImage.cs" />
+    <Compile Include="Enums\Spells.cs" />
+    <Compile Include="Classes\Visualizer.cs" />
+    <Compile Include="Classes\VisualLeaderboard.cs" />
     <Page Include="GameOwerWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="GameWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GuideWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -172,5 +179,6 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
