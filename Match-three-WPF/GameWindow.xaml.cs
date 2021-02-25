@@ -27,7 +27,7 @@ namespace Match_three_WPF
 
             MatchThree.Leaderboard.SetConrols(LeaderLabel, LeaderProgress, LeaderPointsLabel, PercentLabel);
 
-            timer = new GameTimer(100, TimeLabel, TimePB);
+            timer = new GameTimer(300, TimeLabel, TimePB);
             timer.DispatcherTimer.Tick += TimerTick;
             timer.Start();
         }
