@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:Match_three_WPF"
         mc:Ignorable="d"
         Title="Три в ряд" Height="650" Width="900"
-        MinHeight="600" MinWidth="900" WindowStartupLocation="CenterScreen">
+        MinHeight="600" MinWidth="900" WindowStartupLocation="CenterScreen" Icon="diamond.png">
     <Grid>
 
         <Grid.Background>
