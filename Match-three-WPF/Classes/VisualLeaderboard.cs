@@ -1,22 +1,22 @@
 ﻿using Match_three_NET.Framework;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Controls;
 
 namespace Match_three_WPF
 {
+    /// <summary>
+    /// Визуальное отображение таблицы лидеров
+    /// </summary>
     public class VisualLeaderboard
     {
         public Leaderboard board = new Leaderboard();
-
         public Label LeaderLabel;
         public ProgressBar Progress;
         public Label PointsLeft;
         public Label Percents;
-
+        /// <summary>
+        /// Устонавить контролы дляотображения информации
+        /// </summary>
         public void SetConrols(Label leaderLabel, ProgressBar progress, Label pointsLeft, Label percent)
         {
             LeaderLabel = leaderLabel;
@@ -24,7 +24,9 @@ namespace Match_three_WPF
             PointsLeft = pointsLeft;
             Percents = percent;
         }
-
+        /// <summary>
+        /// Обновление информации
+        /// </summary>
         public void UpdateInfo(int currentPoints)
         {
 

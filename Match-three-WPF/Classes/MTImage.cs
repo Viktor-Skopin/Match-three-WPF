@@ -3,6 +3,9 @@ using Match_three_NET.Framework;
 
 namespace Match_three_WPF
 {
+    /// <summary>
+    /// Изображение фигурки
+    /// </summary>
     public class MTImage : Image
     {
         /// <summary>

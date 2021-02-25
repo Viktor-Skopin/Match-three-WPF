@@ -1,5 +1,8 @@
 ﻿namespace Match_three_NET.Framework
 {
+    /// <summary>
+    /// Фигурка
+    /// </summary>
     public enum Figure
     {
         /// <summary>

@@ -19,7 +19,6 @@ namespace Match_three_WPF
             AutoReverse = true,
             RepeatBehavior = RepeatBehavior.Forever
         };
-
         /// <summary>
         /// Анимация пропадания фигуры
         /// </summary>
@@ -30,7 +29,6 @@ namespace Match_three_WPF
             Duration = TimeSpan.FromSeconds(0.5),
             AutoReverse = false
         };
-
         /// <summary>
         /// Анимация появления фигуры
         /// </summary>
@@ -41,7 +39,6 @@ namespace Match_three_WPF
             Duration = TimeSpan.FromSeconds(0.5),
             AutoReverse = false
         };
-
         /// <summary>
         /// Анимация пропадания фигуры
         /// </summary>
@@ -52,7 +49,6 @@ namespace Match_three_WPF
             Duration = TimeSpan.FromSeconds(0.2),
             AutoReverse = false
         };
-
         /// <summary>
         /// Анимация появления фигуры
         /// </summary>

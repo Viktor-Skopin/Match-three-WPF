@@ -27,17 +27,34 @@ namespace Match_three_NET.Framework
         /// Кол-во очков
         /// </summary>
         public int Points { get; set; }
-
+        /// <summary>
+        /// Количестко очков, полученных в результате последнего хода
+        /// </summary>
         public int PointAdded { get; set; }
-
+        /// <summary>
+        /// Активна ли "Бомба"
+        /// </summary>
         public bool IsBombAviable { get; set; }
+        /// <summary>
+        /// Активно ли "Перемешивание"
+        /// </summary>
         public bool IsMixAviable { get; set; }
+        /// <summary>
+        /// Активна ли "Горизонталь"
+        /// </summary>
         public bool IsHorizontalSlashAviable { get; set; }
+        /// <summary>
+        /// Активна ли "Вертикаль"
+        /// </summary>
         public bool IsVerticalSlashAviable { get; set; }
+        /// <summary>
+        /// Активна ли "Кирка"
+        /// </summary>
         public bool IsPickAviable { get; set; }
+        /// <summary>
+        /// Активна ли "Алмазизация"
+        /// </summary>
         public bool IsDiamondizationAviable { get; set; }
-
-
 
         /// <summary>
         /// Конструктор
@@ -237,7 +254,6 @@ namespace Match_three_NET.Framework
                 }
             }
         }
-
         /// <summary>
         /// Удалить помеченные на удаление ячейки
         /// </summary>
@@ -256,7 +272,6 @@ namespace Match_three_NET.Framework
                 DeleteCell(cell);
             }
         }
-
         /// <summary>
         /// Очищает ячейку если она помечена на удаление
         /// </summary>
@@ -270,7 +285,11 @@ namespace Match_three_NET.Framework
                 cell.figure = Figure.Empty;
             }
         }
-
+        /// <summary>
+        /// Определить стоимость фигурки ячейки
+        /// </summary>
+        /// <param name="cell">Ячейка</param>
+        /// <returns>Стоимость ячейки</returns>
         private int DefineCellPoints(Cell cell)
         {
             switch (cell.figure)
@@ -293,11 +312,13 @@ namespace Match_three_NET.Framework
                     return 0;
             }
         }
+        /// <summary>
+        /// Сброс счётчика полученных очков
+        /// </summary>
         public void ResetCounter()
         {
             PointAdded = 0;
         }
-
         /// <summary>
         /// Поднимает пустые ячейки вверх
         /// </summary>
@@ -334,13 +355,11 @@ namespace Match_three_NET.Framework
                         SwapCells(cells[x, y], cells[x, y - 1]);
 
                         cells[x, y].IsChanged = true;
-                        //cells[x, y - 1].IsChanged = true;
                     }
                 }
             }
 
         }
-
         /// <summary>
         /// Создаёт новые фигурки на месте пустых
         /// </summary>
@@ -360,7 +379,6 @@ namespace Match_three_NET.Framework
                 }
             }
         }
-
         /// <summary>
         /// Есть ли пустые ячейки
         /// </summary>
@@ -378,7 +396,6 @@ namespace Match_three_NET.Framework
             }
             return false;
         }
-
         /// <summary>
         /// Заполняет и опускает ячейки пока не останется совпадений
         /// </summary>
@@ -436,7 +453,6 @@ namespace Match_three_NET.Framework
                 return false;
             }
         }
-
         /// <summary>
         /// Проверка, совпают ли координаты с координатами выбранной ячейки
         /// </summary>
@@ -451,7 +467,6 @@ namespace Match_three_NET.Framework
                 return false;
             }
         }
-
         /// <summary>
         /// Есть ли комбинации фигур после хода
         /// </summary>
@@ -493,7 +508,10 @@ namespace Match_three_NET.Framework
             }
             return false;
         }
-
+        /// <summary>
+        /// Удаляет все ячейки на указанной горизонтальной линии
+        /// </summary>
+        /// <param name="y">Координата горизонтальной линии</param>
         public void HorisontalSlash(int y)
         {
             for (int i = 0; i < fieldSize; i++)
@@ -506,7 +524,10 @@ namespace Match_three_NET.Framework
 
             IsHorizontalSlashAviable = false;
         }
-
+        /// <summary>
+        /// Удаляет все ячейки на указанной вертикальной линии
+        /// </summary>
+        /// <param name="x">Координата вертикальной линии</param>
         public void VerticalSlash(int x)
         {
             for (int i = 0; i < fieldSize; i++)
@@ -519,7 +540,10 @@ namespace Match_three_NET.Framework
 
             IsVerticalSlashAviable = false;
         }
-
+        /// <summary>
+        /// Превращает все ячейки с теой же фигуркой, что и в выбранной ячейки в алмазы
+        /// </summary>
+        /// <param name="cell">Ячейка</param>
         public void Diamondization(Cell cell)
         {
             Figure figure = cell.figure;
@@ -535,7 +559,10 @@ namespace Match_three_NET.Framework
 
             IsDiamondizationAviable = false;
         }
-
+        /// <summary>
+        /// Удаляет выбранную ячейку
+        /// </summary>
+        /// <param name="cell">Ячейка</param>
         public void Pick(Cell cell)
         {
             cell.IsMarkedForDeletion = true;
@@ -544,7 +571,9 @@ namespace Match_three_NET.Framework
 
             IsPickAviable = false;
         }
-
+        /// <summary>
+        /// Перешивает ячейки на поле
+        /// </summary>
         public void Mix()
         {
             Random random = new Random();
@@ -557,7 +586,10 @@ namespace Match_three_NET.Framework
 
             IsMixAviable = false;
         }
-
+        /// <summary>
+        /// Уничтожает выбранную ячейку и ячейки вокруг неё
+        /// </summary>
+        /// <param name="cell">Ячейка</param>
         public void Bomb(Cell cell)
         {
             int x = cell.X;
@@ -618,7 +650,10 @@ namespace Match_three_NET.Framework
 
             IsBombAviable = false;
         }
-
+        /// <summary>
+        /// Открывает доступ к случайной способности
+        /// </summary>
+        /// <param name="random">Random созданный вне цикла</param>
         public void UnlockRandomSpell(Random random)
         {
             int number = random.Next(1, 100);
@@ -648,7 +683,12 @@ namespace Match_three_NET.Framework
                 IsDiamondizationAviable = true;
             }
         }
-
+        /// <summary>
+        /// Будет ли разблокирована способность в этот раз. Зависит от длины собранной линии
+        /// </summary>
+        /// <param name="random">Random созданный вне цикла</param>
+        /// <param name="figureCount">Длинна собранной линии</param>
+        /// <returns></returns>
         public bool IsSpellUnloced(Random random, int figureCount)
         {
             int number = random.Next(1, 100);

@@ -151,7 +151,7 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
 
-                <TextBlock Text="В ходе игры вы с некоторой вероятностью можите получить возможно разово использовать следубщие способности:"
+                <TextBlock Text="В ходе игры вы с некоторой вероятностью можите получить возможность разово использовать следубщие способности:"
                            TextWrapping="Wrap"
                            HorizontalAlignment="Center"
                            VerticalAlignment="Center"

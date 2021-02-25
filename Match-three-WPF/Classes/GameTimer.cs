@@ -4,6 +4,9 @@ using System.Windows.Controls;
 
 namespace Match_three_WPF
 {
+    /// <summary>
+    /// Таймер
+    /// </summary>
     public class GameTimer
     {
         /// <summary>
@@ -22,8 +25,17 @@ namespace Match_three_WPF
         /// Оставшееся время
         /// </summary>
         public TimeSpan timeSpan;
+        /// <summary>
+        /// Количество секунд, оставшихся до конца игры
+        /// </summary>
         public int timeSeconds;
 
+        /// <summary>
+        /// Конструктор
+        /// </summary>
+        /// <param name="seconds">Количество секунд до конца игры</param>
+        /// <param name="label">Label для вывода оставшегося времени</param>
+        /// <param name="progressBar">Progress Bar для вывода оставшегося времени</param>
         public GameTimer(int seconds, Label label, ProgressBar progressBar)
         {
             DispatcherTimer = new DispatcherTimer();
@@ -38,12 +50,16 @@ namespace Match_three_WPF
             timeSeconds = seconds;
             GameLabel.Content = timeSpan.ToString("mm' : 'ss");
         }
-
+        /// <summary>
+        /// Запуск таймера
+        /// </summary>
         public void Start()
         {
             DispatcherTimer.Start();
         }
-
+        /// <summary>
+        /// Остановка таймера
+        /// </summary>
         public void Stop()
         {
             DispatcherTimer.Stop();

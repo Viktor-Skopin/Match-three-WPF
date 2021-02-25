@@ -36,17 +36,25 @@ namespace Match_three_WPF
         /// Графический элемент, отображающий кол-во очков
         /// </summary>
         private Label Points;
-
+        /// <summary>
+        /// Графический элемент, отображающий кол-во очков, собранных за последний ход
+        /// </summary>
         private Label PointsCounter;
         /// <summary>
         /// Происходит ли анимация в данный момент
         /// </summary>
         private bool IsAnimationGoing = false;
-
+        /// <summary>
+        /// Управление кнопками
+        /// </summary>
         public ButtonsController ButtonController;
-
+        /// <summary>
+        /// Класс управления таблицей лидеров
+        /// </summary>
         public VisualLeaderboard Leaderboard;
-
+        /// <summary>
+        /// Выбранная на данный момент способность
+        /// </summary>
         public Spells ChosenSpell;
         /// <summary>
         /// Конструктор
@@ -368,7 +376,6 @@ namespace Match_three_WPF
 
             IsAnimationGoing = false;
         }
-
         /// <summary>
         /// Начало анимации выбора в указанной ячейке
         /// </summary>
@@ -470,13 +477,18 @@ namespace Match_three_WPF
 
             }
         }
-
+        /// <summary>
+        /// Перетасовка фигур на поле
+        /// </summary>
         private async Task MakeNewFigures()
         {
             GameField.MakeNewFigures();
             await DefineAllImagesAnim();
         }
-
+        /// <summary>
+        /// Проверка фигур на удаление
+        /// </summary>
+        /// <returns></returns>
         private async Task DeleteFigures()
         {
             GameField.CheckAllCells();
@@ -484,7 +496,10 @@ namespace Match_three_WPF
             UpdatePointsLabel();
             await PutDownFigures();
         }
-
+        /// <summary>
+        /// Обновление поля
+        /// </summary>
+        /// <returns></returns>
         private async Task UpdateField()
         {
             do
@@ -495,7 +510,9 @@ namespace Match_three_WPF
             while (GameField.HaveEmptyFigeres());
 
         }
-
+        /// <summary>
+        /// Горизонталь
+        /// </summary>
         public async Task HorizontalSlash(int y)
         {            
             GameField.HorisontalSlash(y);
@@ -512,7 +529,9 @@ namespace Match_three_WPF
 
             GameField.ResetCounter();
         }
-
+        /// <summary>
+        /// Вертикаль
+        /// </summary>
         public async Task VerticalSlash(int x)
         {
             GameField.VerticalSlash(x);
@@ -529,6 +548,9 @@ namespace Match_three_WPF
 
             GameField.ResetCounter();
         }
+        /// <summary>
+        /// Алмазизация
+        /// </summary>
         public async Task Diamondization(Cell cell)
         {
             GameField.Diamondization(cell);
@@ -545,7 +567,9 @@ namespace Match_three_WPF
 
             GameField.ResetCounter();
         }
-
+        /// <summary>
+        /// Кирка
+        /// </summary>
         public async Task Pick(Cell cell)
         {
             GameField.Pick(cell);
@@ -562,7 +586,9 @@ namespace Match_three_WPF
 
             GameField.ResetCounter();
         }
-
+        /// <summary>
+        /// Перемешивание
+        /// </summary>
         public async Task Mix()
         {
             if (IsAnimationGoing)
@@ -591,7 +617,9 @@ namespace Match_three_WPF
             ButtonController.UpdateStatus(GameField);
             Leaderboard.UpdateInfo(GameField.Points);
         }
-
+        /// <summary>
+        /// Бомба
+        /// </summary>
         public async Task Bomb(Cell cell)
         {
             GameField.Bomb(cell);
@@ -608,7 +636,9 @@ namespace Match_three_WPF
 
             GameField.ResetCounter();
         }
-
+        /// <summary>
+        /// Новая игра
+        /// </summary>
         public void NewGame()
         {
             IsAnimationGoing = false;
