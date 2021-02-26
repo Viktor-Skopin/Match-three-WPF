@@ -8,7 +8,13 @@ namespace Match_three_WPF
     /// </summary>
     public partial class GameWindow : Window
     {
+        /// <summary>
+        /// Игра
+        /// </summary>
         Visualizer MatchThree;
+        /// <summary>
+        /// Таймер
+        /// </summary>
         GameTimer timer;
         public GameWindow()
         {
@@ -172,8 +178,6 @@ namespace Match_three_WPF
 
                 MatchThree.ButtonController.UpdateStatus(MatchThree.GameField);
 
-                MatchThree.Leaderboard.SetConrols(LeaderLabel, LeaderProgress, LeaderPointsLabel, PercentLabel);
-
                 timer = new GameTimer(300, TimeLabel, TimePB);
                 timer.DispatcherTimer.Tick += TimerTick;
                 timer.Start();
@@ -193,8 +197,6 @@ namespace Match_three_WPF
             MatchThree.ButtonController.Diamondization = DiamondizationSpellButton;
 
             MatchThree.ButtonController.UpdateStatus(MatchThree.GameField);
-
-            MatchThree.Leaderboard.SetConrols(LeaderLabel, LeaderProgress, LeaderPointsLabel, PercentLabel);
 
             timer = new GameTimer(300, TimeLabel, TimePB);
             timer.DispatcherTimer.Tick += TimerTick;
