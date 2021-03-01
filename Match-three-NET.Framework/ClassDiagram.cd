@@ -1,0 +1,54 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Логическая игровая ячейка">
+    <Position X="0.74" Y="0.948" Height="0.5" Width="1.981" />
+  </Comment>
+  <Comment CommentText="Логическое игровое поле">
+    <Position X="3.208" Y="1.021" Height="0.365" Width="1.846" />
+  </Comment>
+  <Comment CommentText="Логическая таблица лидеров">
+    <Position X="5.385" Y="0.875" Height="0.469" Width="1.721" />
+  </Comment>
+  <Comment CommentText="Запись о игроке">
+    <Position X="7.375" Y="0.99" Height="0.354" Width="1.148" />
+  </Comment>
+  <Comment CommentText="Перечисление фигурок">
+    <Position X="8.917" Y="0.948" Height="0.375" Width="1.7" />
+  </Comment>
+  <Class Name="Match_three_NET.Framework.Cell">
+    <Position X="1" Y="1.5" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAAAIAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAQAAIYAA=</HashCode>
+      <FileName>Cell.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_NET.Framework.GameField">
+    <Position X="3" Y="1.5" Width="2.25" />
+    <TypeIdentifier>
+      <HashCode>kAACABgABQJggKgEOQkBBgBDRAEggAQAYAQAAAEFACE=</HashCode>
+      <FileName>GameField.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_NET.Framework.Leaderboard">
+    <Position X="5.5" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAYAAAAAAAAAAAAAAAAQAAACACBgAgAAAAEAAABAAAA=</HashCode>
+      <FileName>Leaderboard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_NET.Framework.PlayerAccount">
+    <Position X="7.25" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>PlayerAccount.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Match_three_NET.Framework.Figure">
+    <Position X="9" Y="1.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>gAAAAAAAAAAEAAAACQIAAAAAAAAAAgAAAAQAAAAAAAA=</HashCode>
+      <FileName>Figure.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

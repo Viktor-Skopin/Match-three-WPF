@@ -40,6 +40,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
     <Reference Include="System.Xml" />
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="System.Core" />
@@ -61,10 +63,13 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="AboutWindow.xaml.cs">
+      <DependentUpon>AboutWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Classes\Animations.cs" />
     <Compile Include="Classes\ButtonsController.cs" />
-    <Compile Include="GameOwerWindow.xaml.cs">
-      <DependentUpon>GameOwerWindow.xaml</DependentUpon>
+    <Compile Include="GameOverWindow.xaml.cs">
+      <DependentUpon>GameOverWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="Classes\GameTimer.cs" />
     <Compile Include="GameWindow.xaml.cs">
@@ -80,7 +85,11 @@
     <Compile Include="Enums\Spells.cs" />
     <Compile Include="Classes\Visualizer.cs" />
     <Compile Include="Classes\VisualLeaderboard.cs" />
-    <Page Include="GameOwerWindow.xaml">
+    <Page Include="AboutWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="GameOverWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -127,6 +136,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include="ClassDiagram.cd" />
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>

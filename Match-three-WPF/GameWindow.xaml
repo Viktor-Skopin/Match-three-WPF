@@ -191,8 +191,9 @@
                 </Grid>
             </Border >
             <Border Grid.Row="3" BorderBrush="Black" BorderThickness="1" Padding="5">
-                <Grid >
+                <Grid>
                     <Grid.RowDefinitions>
+                        <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
                         <RowDefinition/>
@@ -200,19 +201,23 @@
                     </Grid.RowDefinitions>
                     <Button Grid.Row="0" Margin="3,3,1,1" Click="Button_Click_1">
                         <Label Content="Новая игра"
-                           FontSize="15"/>
+                           FontSize="10"/>
                     </Button>
                     <Button Grid.Row="1" Margin="3,3,1,1" Click="Button_Click_2">
                         <Label Content="Правила"
-                           FontSize="15"/>
+                           FontSize="10"/>
                     </Button>
                     <Button Grid.Row="2" Margin="3,3,1,1" Click="Button_Click">
                         <Label Content="Таблица лидеров"
-                           FontSize="15"/>
+                           FontSize="10"/>
                     </Button>
                     <Button Grid.Row="3" Margin="3,3,1,1" x:Name="ExitButton" Click="Exit">
                         <Label Content="Выход"
-                           FontSize="15"/>
+                           FontSize="10"/>
+                    </Button>
+                    <Button Grid.Row="4" Margin="3,3,1,1" Click="Button_Click_3">
+                        <Label Content="О программе"
+                           FontSize="10"/>
                     </Button>
                 </Grid>
             </Border>

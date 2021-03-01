@@ -1,0 +1,74 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ClassDiagram MajorVersion="1" MinorVersion="1">
+  <Comment CommentText="Статический класс со списком анимаций">
+    <Position X="0.5" Y="0.5" Height="0.448" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Класс управления кнопками способностей">
+    <Position X="2.438" Y="0.5" Height="0.448" Width="1.669" />
+  </Comment>
+  <Comment CommentText="Таймер">
+    <Position X="4.615" Y="0.51" Height="0.396" Width="0.742" />
+  </Comment>
+  <Comment CommentText="Класс, визуализирующий логическую часть игры">
+    <Position X="6.135" Y="0.5" Height="0.448" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Класс, визуализирующий таблицу лидеров">
+    <Position X="0.5" Y="3.333" Height="0.469" Width="1.794" />
+  </Comment>
+  <Comment CommentText="Перечисление списка способностей">
+    <Position X="2.385" Y="4.438" Height="0.5" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Изображение ячейки. Унаследованно от &quot;Image&quot;">
+    <Position X="4.188" Y="4.167" Height="0.667" Width="1.731" />
+  </Comment>
+  <Class Name="Match_three_WPF.Animations">
+    <Position X="0.5" Y="1" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAQAAAAAAAIAAAAAAAAAAAAAAAABAAQAAAAAAAAAQAA=</HashCode>
+      <FileName>Classes\Animations.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_WPF.ButtonsController">
+    <Position X="2.5" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAEAAAAAIAAEAAABAAAQAAEAAABAAAACAAEAAA=</HashCode>
+      <FileName>Classes\ButtonsController.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_WPF.GameTimer">
+    <Position X="4.25" Y="1" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAhAAEJAAAAAABAAA=</HashCode>
+      <FileName>Classes\GameTimer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_WPF.MTImage">
+    <Position X="4.25" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAYAA=</HashCode>
+      <FileName>Classes\MTImage.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_WPF.Visualizer">
+    <Position X="6" Y="1" Width="2" />
+    <TypeIdentifier>
+      <HashCode>AgCAIAAAAAYggLQCEUEgBBkARhEAABAACAQACAAEAAA=</HashCode>
+      <FileName>Classes\Visualizer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="Match_three_WPF.VisualLeaderboard">
+    <Position X="0.5" Y="4" Width="1.75" />
+    <TypeIdentifier>
+      <HashCode>AAARAAAAAEAAAAAAAAQAAAAAAAAAAAAAIAAAAACAAAA=</HashCode>
+      <FileName>Classes\VisualLeaderboard.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Enum Name="Match_three_WPF.Spells">
+    <Position X="2.5" Y="5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAIAAEAAABAAAQAAAAAAAAAAACAEEAAA=</HashCode>
+      <FileName>Enums\Spells.cs</FileName>
+    </TypeIdentifier>
+  </Enum>
+  <Font Name="Segoe UI" Size="9" />
+</ClassDiagram>

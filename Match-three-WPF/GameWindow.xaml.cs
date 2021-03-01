@@ -210,5 +210,13 @@ namespace Match_three_WPF
             GW.ShowDialog();
             timer.Start();
         }
+
+        private void Button_Click_3(object sender, RoutedEventArgs e)
+        {
+            timer.Stop();
+            AboutWindow window = new AboutWindow();
+            window.ShowDialog();
+            timer.Start();
+        }
     }
 }
