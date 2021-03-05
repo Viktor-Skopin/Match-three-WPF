@@ -1,50 +1,62 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Comment CommentText="Логическая игровая ячейка">
-    <Position X="0.74" Y="0.948" Height="0.5" Width="1.981" />
+    <Position X="2.867" Y="0.889" Height="0.5" Width="1.981" />
   </Comment>
   <Comment CommentText="Логическое игровое поле">
-    <Position X="3.208" Y="1.021" Height="0.365" Width="1.846" />
+    <Position X="6.208" Y="1.021" Height="0.365" Width="1.846" />
   </Comment>
   <Comment CommentText="Логическая таблица лидеров">
-    <Position X="5.385" Y="0.875" Height="0.469" Width="1.721" />
+    <Position X="8.635" Y="0.875" Height="0.469" Width="1.721" />
   </Comment>
   <Comment CommentText="Запись о игроке">
-    <Position X="7.375" Y="0.99" Height="0.354" Width="1.148" />
+    <Position X="11.567" Y="1.034" Height="0.354" Width="1.148" />
   </Comment>
   <Comment CommentText="Перечисление фигурок">
-    <Position X="8.917" Y="0.948" Height="0.375" Width="1.7" />
+    <Position X="0.726" Y="0.947" Height="0.375" Width="1.7" />
   </Comment>
   <Class Name="Match_three_NET.Framework.Cell">
-    <Position X="1" Y="1.5" Width="1.75" />
+    <Position X="3" Y="1.5" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAAAIAAAAAAAEAAAAAAAAAAAAAAAAAAAABAAQAAIYAA=</HashCode>
       <FileName>Cell.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="figure" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="Match_three_NET.Framework.GameField">
-    <Position X="3" Y="1.5" Width="2.25" />
+    <Position X="6" Y="1.5" Width="2.25" />
     <TypeIdentifier>
       <HashCode>kAACABgABQJggKgEOQkBBgBDRAEggAQAYAQAAAEFACE=</HashCode>
       <FileName>GameField.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="ChosenCell" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="cells" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Match_three_NET.Framework.Leaderboard">
-    <Position X="5.5" Y="1.5" Width="1.5" />
+    <Position X="8.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAYAAAAAAAAAAAAAAAAQAAACACBgAgAAAAEAAABAAAA=</HashCode>
       <FileName>Leaderboard.cs</FileName>
     </TypeIdentifier>
+    <ShowAsCollectionAssociation>
+      <Property Name="Players" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Match_three_NET.Framework.PlayerAccount">
-    <Position X="7.25" Y="1.5" Width="1.5" />
+    <Position X="11.25" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAgAAAAAAAAAQAAAAAAAAAAAAAAAAAAAA=</HashCode>
       <FileName>PlayerAccount.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Enum Name="Match_three_NET.Framework.Figure">
-    <Position X="9" Y="1.5" Width="1.5" />
+    <Position X="0.75" Y="1.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>gAAAAAAAAAAEAAAACQIAAAAAAAAAAgAAAAQAAAAAAAA=</HashCode>
       <FileName>Figure.cs</FileName>

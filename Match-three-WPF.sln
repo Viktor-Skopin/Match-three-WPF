@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match-three-WPF", "Match-th
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Match-three-NET.Framework", "Match-three-NET.Framework\Match-three-NET.Framework.csproj", "{AD84321F-45F8-4920-822A-DDB9ECEEF415}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MTTest", "MTTest\MTTest.csproj", "{B3AD9BE5-0DBC-4812-B283-5E825031EF0F}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD84321F-45F8-4920-822A-DDB9ECEEF415}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B3AD9BE5-0DBC-4812-B283-5E825031EF0F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B3AD9BE5-0DBC-4812-B283-5E825031EF0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B3AD9BE5-0DBC-4812-B283-5E825031EF0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B3AD9BE5-0DBC-4812-B283-5E825031EF0F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

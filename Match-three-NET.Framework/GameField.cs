@@ -22,7 +22,7 @@ namespace Match_three_NET.Framework
         /// <summary>
         /// Ссылка на выбранную ячейку в массиве
         /// </summary>
-        private Cell ChosenCell;
+        public Cell ChosenCell;
         /// <summary>
         /// Кол-во очков
         /// </summary>
@@ -290,7 +290,7 @@ namespace Match_three_NET.Framework
         /// </summary>
         /// <param name="cell">Ячейка</param>
         /// <returns>Стоимость ячейки</returns>
-        private int DefineCellPoints(Cell cell)
+        public int DefineCellPoints(Cell cell)
         {
             switch (cell.figure)
             {

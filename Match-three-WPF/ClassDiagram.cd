@@ -1,74 +1,149 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
   <Comment CommentText="Статический класс со списком анимаций">
-    <Position X="0.5" Y="0.5" Height="0.448" Width="1.7" />
+    <Position X="2.5" Y="0.5" Height="0.448" Width="1.7" />
   </Comment>
   <Comment CommentText="Класс управления кнопками способностей">
-    <Position X="2.438" Y="0.5" Height="0.448" Width="1.669" />
+    <Position X="5.146" Y="0.622" Height="0.448" Width="1.669" />
   </Comment>
   <Comment CommentText="Таймер">
-    <Position X="4.615" Y="0.51" Height="0.396" Width="0.742" />
+    <Position X="11.198" Y="0.75" Height="0.396" Width="0.742" />
   </Comment>
   <Comment CommentText="Класс, визуализирующий логическую часть игры">
-    <Position X="6.135" Y="0.5" Height="0.448" Width="1.7" />
+    <Position X="5" Y="5.75" Height="0.448" Width="1.7" />
   </Comment>
   <Comment CommentText="Класс, визуализирующий таблицу лидеров">
-    <Position X="0.5" Y="3.333" Height="0.469" Width="1.794" />
+    <Position X="2.5" Y="3.333" Height="0.469" Width="1.794" />
   </Comment>
   <Comment CommentText="Перечисление списка способностей">
-    <Position X="2.385" Y="4.438" Height="0.5" Width="1.7" />
+    <Position X="0.5" Y="6" Height="0.5" Width="1.7" />
   </Comment>
   <Comment CommentText="Изображение ячейки. Унаследованно от &quot;Image&quot;">
-    <Position X="4.188" Y="4.167" Height="0.667" Width="1.731" />
+    <Position X="7.406" Y="5.49" Height="0.667" Width="1.731" />
+  </Comment>
+  <Comment CommentText="Игровая форма">
+    <Position X="7.61" Y="0.5" Height="0.357" Width="1.347" />
+  </Comment>
+  <Comment CommentText="Логическая игровая ячейка">
+    <Position X="2.5" Y="10.5" Height="0.5" Width="1.981" />
+  </Comment>
+  <Comment CommentText="Запись о игроке">
+    <Position X="0.881" Y="8.829" Height="0.354" Width="1.148" />
+  </Comment>
+  <Comment CommentText="Логическая таблица лидеров">
+    <Position X="0.5" Y="0.5" Height="0.469" Width="1.721" />
+  </Comment>
+  <Comment CommentText="Перечисление фигурок">
+    <Position X="7" Y="8.25" Height="0.375" Width="1.7" />
+  </Comment>
+  <Comment CommentText="Логическое игровое поле">
+    <Position X="10.37" Y="4.481" Height="0.365" Width="1.846" />
   </Comment>
   <Class Name="Match_three_WPF.Animations">
-    <Position X="0.5" Y="1" Width="1.75" />
+    <Position X="2.5" Y="1" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAQAAAAAAAIAAAAAAAAAAAAAAAABAAQAAAAAAAAAQAA=</HashCode>
       <FileName>Classes\Animations.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Match_three_WPF.ButtonsController">
-    <Position X="2.5" Y="1" Width="1.5" />
+    <Position X="5.25" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAEAAAAAIAAEAAABAAAQAAEAAABAAAACAAEAAA=</HashCode>
       <FileName>Classes\ButtonsController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Match_three_WPF.GameTimer">
-    <Position X="4.25" Y="1" Width="1.5" />
+    <Position X="10.75" Y="1.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAACAAAAAAAAAAAAAAAAAAhAAEJAAAAAABAAA=</HashCode>
       <FileName>Classes\GameTimer.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Class Name="Match_three_WPF.MTImage">
-    <Position X="4.25" Y="5" Width="1.5" />
+    <Position X="7.5" Y="6.25" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAABAAAAAAYAA=</HashCode>
       <FileName>Classes\MTImage.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Property Name="figure" />
+    </ShowAsAssociation>
   </Class>
   <Class Name="Match_three_WPF.Visualizer">
-    <Position X="6" Y="1" Width="2" />
+    <Position X="4.75" Y="6.25" Width="2" />
     <TypeIdentifier>
       <HashCode>AgCAIAAAAAYggLQCEUEgBBkARhEAABAACAQACAAEAAA=</HashCode>
       <FileName>Classes\Visualizer.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="AnimatedImage" />
+      <Field Name="GameField" />
+      <Field Name="ButtonController" />
+      <Field Name="ChosenSpell" />
+      <Field Name="Leaderboard" />
+    </ShowAsAssociation>
+    <ShowAsCollectionAssociation>
+      <Field Name="Images" />
+    </ShowAsCollectionAssociation>
   </Class>
   <Class Name="Match_three_WPF.VisualLeaderboard">
-    <Position X="0.5" Y="4" Width="1.75" />
+    <Position X="2.5" Y="4" Width="1.75" />
     <TypeIdentifier>
       <HashCode>AAARAAAAAEAAAAAAAAQAAAAAAAAAAAAAIAAAAACAAAA=</HashCode>
       <FileName>Classes\VisualLeaderboard.cs</FileName>
     </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="board" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Match_three_NET.Framework.GameField">
+    <Position X="10" Y="5" Width="2.75" />
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Field Name="cells" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Match_three_NET.Framework.Cell">
+    <Position X="2.5" Y="11.25" Width="2" />
+    <TypeIdentifier />
+    <ShowAsAssociation>
+      <Property Name="figure" />
+    </ShowAsAssociation>
+  </Class>
+  <Class Name="Match_three_WPF.GameWindow">
+    <Position X="7.25" Y="1.25" Width="2.5" />
+    <TypeIdentifier>
+      <HashCode>AAQAACAAAQABAAQAAAAEAAEEAgAAARAAIAAACBAAIAA=</HashCode>
+      <FileName>GameWindow.xaml.cs</FileName>
+    </TypeIdentifier>
+    <ShowAsAssociation>
+      <Field Name="MatchThree" />
+      <Field Name="timer" />
+    </ShowAsAssociation>
+    <Lollipop Position="0.2" />
+  </Class>
+  <Class Name="Match_three_NET.Framework.Leaderboard">
+    <Position X="0.5" Y="1" Width="1.5" />
+    <TypeIdentifier />
+    <ShowAsCollectionAssociation>
+      <Property Name="Players" />
+    </ShowAsCollectionAssociation>
+  </Class>
+  <Class Name="Match_three_NET.Framework.PlayerAccount">
+    <Position X="0.75" Y="9.25" Width="1.5" />
+    <TypeIdentifier />
   </Class>
   <Enum Name="Match_three_WPF.Spells">
-    <Position X="2.5" Y="5" Width="1.5" />
+    <Position X="0.75" Y="6.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAIAAEAAABAAAQAAAAAAAAAAACAEEAAA=</HashCode>
       <FileName>Enums\Spells.cs</FileName>
     </TypeIdentifier>
+  </Enum>
+  <Enum Name="Match_three_NET.Framework.Figure">
+    <Position X="7.25" Y="8.75" Width="1.5" />
+    <TypeIdentifier />
   </Enum>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>
